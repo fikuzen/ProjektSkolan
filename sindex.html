@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+	<meta charset="utf-8" />
+	<title>Foodtime</title>
+	<link rel="stylesheet" href="frontend/css/style.css" />
+	<link rel="stylesheet" href="frontend/css/960.css" />
+</head>
+<body>
+	<div id="wrapper">
+		<div id="headerLogin" class="container_12">
+			<div id="header" class="grid_8">
+				<h1>Applkationens namn</h1>
+			</div>
+			<div id="logIn" class="grid_4">
+				<form method="post">
+					<label for="username">Användarnamn</label>
+					<input type="text" id="username" name="username" />
+					<label for="password">Lösenord</label>
+					<input type="password" id="password" name="password" />
+					<label for="remember">Kom ihåg mig</label>
+					<input type="checkbox" value="remember" id="remember" name="remember" />
+					<input type="submit" name="logInSubmit" value="Logga in" />  
+					<p class="small">Har du inget konto än så <a href="register">Registrera dig</a></p>
+				</form>
+			</div>
+		</div>
+		<div id="navigation" class="container_12">
+			<ul>
+				<li><a href="#">Start</a></li>
+				<li><a href="#">Recept</a>
+					<ul>
+						<li><a href="#">Lägg till recept</a></li>
+						<li><a href="#">Lista recept</a></li>
+					</ul>
+				</li>
+				<li><a href="#">Användare</a></li>
+			</ul>
+		</div>
+		<div id="mainContent" class="container_12">
+			<div id="content" class="grid_8">
+				<h2>Nyaste receptet</h2>
+			</div>
+			<div id="sidebar" class="grid_4">
+				<h2>Vecko meny</h2>
+				<dl>
+					<dt>Måndag</dt>
+					<dd>Äggmacka</dd>
+					<dt>Tisdag</dt>
+					<dd>Äggmacka</dd>
+					<dt>Onsdag</dt>
+					<dd>Äggmacka</dd>
+					<dt>Torsdag</dt>
+					<dd>Äggmacka</dd>
+					<dt>Fredag</dt>
+					<dd>Äggmacka</dd>
+					<dt>Lördag</dt>
+					<dd>Äggmacka</dd>
+					<dt>Söndag</dt>
+					<dd>Äggmacka</dd>
+				</dl>
+			</div>
+		</div>
+		<div id="footer" class="container_12">
+			&copy; Copyright Christoffer Rydberg 2012
+		</div>
+	</div>
+</body>
+</html>

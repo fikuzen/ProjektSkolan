@@ -18,13 +18,13 @@ require_once('controller/AuthController.php');
 require_once('controller/RecipeController.php');
 require_once('controller/UserController.php');
 
-class MasterController 
+class TestController 
 {
 	private static $m_title = "Foodtime";	
 	/**
 	 * What happens in the application
 	 */
-	public static function doControll() {
+	public static function doTest() {
 		
 		// Page
 		$page = new \View\Page();
@@ -32,8 +32,15 @@ class MasterController
 		$page->AddJavascript('//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js');
 		$page->AddJavascript('/frontend/js/main.js');
 		
+      // testDatabase Settings
+      // Feel free to update this ones
+      $databaseDB = "foodtime_test";
+      $databaseHost = "localhost";
+      $databaseUser = "root";
+      $databasePassword = "";
+      
 		// Database
-		$dbSettings = new \Model\DBSettings();
+		$dbSettings = new \Model\DBSettings($databaseDB, $databaseHost, $databaseUser, $databasePassword);
   		$db = new \Model\Database();
 		$db->Connect($dbSettings);
 		
@@ -41,37 +48,21 @@ class MasterController
 		$navView = new \View\NavigationView();
 		$masterView = new \View\MasterView();
 		$authController = new \Controller\AuthController($db);
+      
+		$bodyHeader = $masterView->DoHeader();
+		$bodyNavigation = $navView->GetStartNavigation();
 		
-		if($navView->isAdminQuery())
-		{
-			$adminController = new \Controller\AdminController();
-			$html = $adminController->DoControll();
-			$page->SetTitle("Foodtime - Adminpanelen");
-		}
-		else if($navView->isUserQuery())
-		{
-			$html = $userController->DoControll();
-			$page->SetTitle("Foodtime - Användarprofil");
-		}
-		else 
-		{
-			$bodyHeader = $masterView->DoHeader();
-			$bodyAuth = $authController->DoAuth();
-			$bodyNavigation = $navView->GetStartNavigation();
-			
-			//TODO: fix content in start view.
-			$bodyContentLeft = "Hej";
-			$bodyContentRight = "Hej";
-			
-			$bodyFooter = $masterView->DoFooter();
-			self::$m_title = $masterView->DoSiteTitle();
-			$page->SetTitle(self::$m_title);
-		}
+		//TODO: fix content in start view.
+		$bodyContentLeft = "Hej";
+		
+		$bodyFooter = $masterView->DoFooter();
+		self::$m_title = $masterView->DoSiteTitle();
+		$page->SetTitle(self::$m_title);
 		
 		$db->Close();
 		
-		return $page->GenerateHTML5Page($bodyHeader, $bodyAuth, $bodyNavigation, $bodyContentLeft, $bodyContentRight, $bodyFooter);
+		return $page->GenerateHTML5Page("Test av Foodtime", $bodyAuth = "", $bodyNavigation, $bodyContentLeft, $bodyContentRight = "", $bodyFooter);
 	}
 }
 
-echo MasterController::doControll();
+echo TestController::doTest();
