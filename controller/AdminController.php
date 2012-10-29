@@ -2,41 +2,40 @@
 
 namespace Controller;
 
-class AdminController implements IController
+require_once('view/AdminView.php');
+require_once('model/AdminModel.php');
+
+class AdminController
 {
-	public function DoSiteTitle()
+	private $m_db;
+	public function __construct(\Model\Database $db)
 	{
-		
+		$this->m_db = $db;
 	}
 	
-	public function DoHeader()
-	{
+	public function DoControll()
+	{		
+		$adminModel = new \Model\AdminModel($this->m_db);
+		$adminView = new \View\AdminView();
 		
-	}
-	
-	public function DoAuth()
-	{
-		
-	}
-	
-	public function DoNavigation()
-	{
-		
-	}	
-	
-	public function DoContentLeft()
-	{
-		$html = "Hej";		
+		$html = "";
+		if (\Model\User::GetUserSession())
+		{
+			$user = \Model\User::GetUserSession();
+			if($adminModel->IsAdmin($user))
+			{
+				\Common\Page::AddSuccessMessage(\Common\String::RIGHTS_ADMIN);
+				$html = $adminView->DoStart();
+			}
+			else 
+			{
+				\Common\Page::AddErrorMessage(\Common\String::NORIGHTS_ADMIN);
+			}
+		}
+		else 
+		{
+			\Common\Page::AddErrorMessage(\Common\String::NORIGHTS_ADMIN);
+		}
 		return $html;
-	}
-	
-	public function DoContentRight()
-	{
-		
-	}
-	
-	public function DoFooter()
-	{
-		
 	}
 }

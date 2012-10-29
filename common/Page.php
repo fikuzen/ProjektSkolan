@@ -1,6 +1,6 @@
 <?php
 
-namespace View;
+namespace Common;
 
 /*
 	Generates a HTML page with head and body as well as structure.
@@ -14,6 +14,8 @@ class Page
 	private $m_charset = "";
 	private $m_language = "";
 	private $m_title = "";
+	public static $m_errorMessages = array();
+	public static $m_successMessages = array();
 	
 	/**
 	 * @param $language, string language
@@ -24,7 +26,8 @@ class Page
 		$this->m_language = $language;
 		$this->m_charset = $charset;
 	}
-	
+	public static function AddSuccessMessage($message) { self::$m_successMessages[] = $message; }
+	public static function AddErrorMessage($message) { self::$m_errorMessages[] = $message; }
 	public function SetTitle($title) { $this->m_title = $title; }
 	
 	/**
@@ -58,31 +61,13 @@ class Page
 		return $head;
 	}
 	
-	/* Generates the content of the body */
-	public function GenerateBody($bodyContent)
-	{
-		$body = "
-					<body>
-						<div class='wrapper'>
-							$bodyContent
-						</div>
-				";
-		foreach ($this->m_scripts as $script)
-		{
-			$body .= $script;
-		}
-		$body .= "</body>";
-		
-		return $body;
-	}
-	
 	/**
 	 * Generate the title of the page in a h1 tagg.
 	 * 
 	 * @param $bodyHeader, the title
 	 * @return string, htmlcode
 	 */
-	public function GenerateHeader($bodyHeader)
+	private function GenerateHeader($bodyHeader)
 	{
 		$body = "
 				<body>
@@ -101,7 +86,7 @@ class Page
 	 * @param $bodyAuth, the auth context
 	 * @return string, htmlcode
 	 */
-	public function GenerateAuth($bodyAuth)
+	private function GenerateAuth($bodyAuth)
 	{
 		$body = "
 							<div id=\"logIn\" class=\"grid_4\">
@@ -118,7 +103,7 @@ class Page
 	 * @param $bodyNavigation, the main navigation context
 	 * @return string, htmlcode
 	 */
-	public function GenerateNavigation($bodyNavigation)
+	private function GenerateNavigation($bodyNavigation)
 	{
 		$body = "
 						<div id=\"navigation\" class=\"container_12\">
@@ -132,16 +117,28 @@ class Page
 	 * Generate the context for the left column
 	 * 
 	 * @param $bodyContentLeft, the main contents context
+    * @param $fullWidth, if it should be fullWidth or not
 	 * @return string, htmlcode
 	 */
-	public function GenerateBodyLeft($bodyContentLeft)
+	private function GenerateBodyLeft($bodyContentLeft, $fullWidth)
 	{
-		$body = "
+	   if(!$fullWidth)
+      {
+         $body = "
 						<div id=\"mainContent\" class=\"container_12\">
 							<div id=\"content\" class=\"grid_8\">
 								$bodyContentLeft
 							</div>
 				";
+      }
+      else 
+      {
+         $body = "
+                  <div id=\"mainContent\" class=\"container_12\">
+                     $bodyContentLeft
+                  </div>
+            ";
+      }
 		return $body;
 	}
 	
@@ -151,7 +148,7 @@ class Page
 	 * @param $bodyContentRight, the main contents sidebar
 	 * @return string, htmlcode
 	 */
-	public function GenerateBodyRight($bodyContentRight)
+	private function GenerateBodyRight($bodyContentRight)
 	{
 		$body = "
 							<div id=\"sidebar\" class=\"grid_4\">
@@ -168,15 +165,42 @@ class Page
 	 * @param $bodyFooter, should be a p with the footer contect
 	 * @return string, htmlcode
 	 */
-	public function GenerateBodyFooter($bodyFooter)
+	private function GenerateBodyFooter($bodyFooter)
 	{
 		$body = "
 						<div id=\"footer\" class=\"container_12\">
 							$bodyFooter
 						</div>
 					</div>
+					";
+		foreach ($this->m_scripts as $script)
+		{
+			$body .= $script;
+		}
+		$body .= "
 				</body>
 				";
+		
+		return $body;
+	}
+	
+	private function GenerateErrorMessages()
+	{
+		$body = "<div class=\"validationError\">";
+		foreach (self::$m_errorMessages as $errorMessage) {
+			$body .= $errorMessage . "<br />";
+		}
+		$body .= "<a href=\"" . \View\NavigationView::GetStartLink() . "\">Klicka här för att gå tillbaka till startsidan</div>";
+		return $body;
+	}
+	
+	private function GenerateSuccessMessages()
+	{
+		$body = "<div class=\"successMessage\">";
+		foreach (self::$m_successMessages as $m_successMessage) {
+			$body .= $m_successMessage . "<br />";
+		}
+		$body .= "</div>";
 		return $body;
 	}
 	
@@ -193,16 +217,36 @@ class Page
 	 */
 	public function GenerateHTML5Page($bodyHeader = "", $bodyAuth = "", $bodyNavigation = "", $bodyContentLeft = "", $bodyContentRight = "", $bodyFooter = "")
 	{
-		$html = "";
-		$html .= "<html lang='$this->m_language'>";
-		$html .= $this->GenerateHead();
-		$html .= $this->GenerateHeader($bodyHeader);
-		$html .= $this->GenerateAuth($bodyAuth);
-		$html .= $this->GenerateNavigation($bodyNavigation);
-		$html .= $this->GenerateBodyLeft($bodyContentLeft);
-		$html .= $this->GenerateBodyRight($bodyContentRight);
+      $html = "<!DOCTYPE html>";
+      $html .= "<html lang='$this->m_language'>";
+      $html .= $this->GenerateHead();
+      $html .= $this->GenerateHeader($bodyHeader);
+      $html .= $this->GenerateAuth($bodyAuth);
+      $html .= $this->GenerateNavigation($bodyNavigation);
+      
+      // If there's no bodycontentright set width to 100% of contentleft
+      if( $bodyContentRight != "")
+      {
+         $html .= $this->GenerateBodyLeft($bodyContentLeft, false);
+         $html .= $this->GenerateBodyRight($bodyContentRight);
+      }
+      else
+      {
+         $html .= $this->GenerateBodyLeft($bodyContentLeft, true);
+      }
+		
+		if(count(self::$m_errorMessages) != 0)
+		{
+			$html .= $this->GenerateErrorMessages();
+		}
+		
+		if(count(self::$m_successMessages) != 0)
+		{
+			$html .= $this->GenerateSuccessMessages();
+		}
+		
 		$html .= $this->GenerateBodyFooter($bodyFooter);
-		$html .= "</html>";
+      $html .= "</html>";
 		
 		return $html;
 	}
