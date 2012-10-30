@@ -30,6 +30,7 @@ class RecipeController
 			{
 				\Common\Page::AddErrormessage(\Common\String::FAIL_GET_RECIPES);					
 			}
+			$this->m_recipeView->
 		}
 		else if (\View\NavigationView::GetRecipeQuery() == \View\NavigationView::ADD)
 		{

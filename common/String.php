@@ -49,7 +49,12 @@ class String
 		const RECIPE_NAME_TEXT = "Receptnamn";
 		const RECIPE_INGREDIENT_TEXT = "Ingredienser";
 		const RECIPE_DESCRIPTION_TEXT = "Instruktioner";
-		const RECIPE_SEVERITY_TEXT = "Svårighetsgrad";
+		const RECIPE_SEVERITY_TEXT = "För att klara av detta recept bör du kunna";
+			const RECIPE_SEVERITY_VALUE_1_TEXT = "öppna kylskåpet";
+			const RECIPE_SEVERITY_VALUE_2_TEXT = "koka makaroner";
+			const RECIPE_SEVERITY_VALUE_3_TEXT = "";
+			const RECIPE_SEVERITY_VALUE_4_TEXT = "Krögare";
+			const RECIPE_SEVERITY_VALUE_5_TEXT = "Mästerkock";
 		// Error messages
 		const NORIGHTS_ADMIN = "Du är inte administratör.";
 		const NORIGHTS_EDIT_PROFILE = "Du är inte inloggad och kan därför inte editera din profil.";

@@ -92,7 +92,13 @@ class RecipeView
 				<label for=\"" . \Common\String::RECIPE_DESCRIPTION . "\">" . \Common\String::RECIPE_DESCRIPTION_TEXT . "</label>
 				<textarea id=\"" . \Common\String::RECIPE_DESCRIPTION . "\" name=\"" . \Common\String::RECIPE_DESCRIPTION . "\"></textarea>
 				<label for=\"" . \Common\String::RECIPE_SEVERITY . "\">" . \Common\String::RECIPE_SEVERITY_TEXT . "</label>
-				<input type=\"number\" min=\"" . \Common\String::SEVERITY_MIN . "\" max=\"" . \Common\String::SEVERITY_MAX . "\" id=\"" . \Common\String::RECIPE_SEVERITY . "\" name=\"" . \Common\String::RECIPE_SEVERITY . "\" /><br />
+				<select name=\"" . \Common\String::RECIPE_SEVERITY . "\" id=\"" . \Common\String::RECIPE_SEVERITY . "\">
+					<option value=\"1\">" . \Common\String::RECIPE_SEVERITY_VALUE_1_TEXT . "</option>
+					<option value=\"2\">" . \Common\String::RECIPE_SEVERITY_VALUE_2_TEXT . "</option>
+					<option value=\"3\">" . \Common\String::RECIPE_SEVERITY_VALUE_3_TEXT . "</option>
+					<option value=\"4\">" . \Common\String::RECIPE_SEVERITY_VALUE_4_TEXT . "</option>
+					<option value=\"5\">" . \Common\String::RECIPE_SEVERITY_VALUE_5_TEXT . "</option>
+				</select><br />
 				<input class=\"left\" type=\"submit\" name=\"" . \Common\String::ADD_RECIPE_SUBMIT . "\" value=\"" . \Common\String::ADD_RECIPE_TEXT . "\" />
 			</form>";
 		return $html;

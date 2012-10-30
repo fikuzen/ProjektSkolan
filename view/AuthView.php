@@ -18,7 +18,7 @@ class AuthView
 	{
 		foreach($this->m_validator->GetErrorMessages() as $errorMessage)
 		{
-			$this->m_errorMessages[] = $errorMessage;
+			$this->AddErrorMessage($errorMessage);
 		}
 	}
 
