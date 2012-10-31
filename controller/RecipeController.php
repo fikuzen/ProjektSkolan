@@ -4,6 +4,7 @@ namespace Controller;
 
 require_once('view/RecipeView.php');
 require_once('model/RecipeModel.php');
+require_once('model/UserModel.php');
 
 class RecipeController
 {
@@ -17,52 +18,178 @@ class RecipeController
 	{
 		$recipeView = new \View\RecipeView();
 		$recipeModel = new \Model\RecipeModel($this->m_db);
+		$userModel = new \Model\UserModel($this->m_db);
 		
 		if(\View\NavigationView::GetRecipeQuery() == \View\NavigationView::START || \View\NavigationView::GetRecipeQuery() == \View\NavigationView::LISTNING)
 		{
+			$html = "";
 			$recipes = $recipeModel->GetRecipes();
 			if($recipes)
 			{
 				$html = $recipeView->DoRecipeList($recipes);
-				$html .= $recipeView->DoAddRecipeButton();
 			}
 			else
 			{
 				\Common\Page::AddErrormessage(\Common\String::FAIL_GET_RECIPES);					
 			}
+			$html .= $recipeView->DoAddRecipeButton();
 		}
 		else if (\View\NavigationView::GetRecipeQuery() == \View\NavigationView::ADD)
 		{
-			$html = $recipeView->DoAddRecipeForm();
-			if($recipeView->TriedToAddRecipe())
+			$html = "";
+			$userInSession = \Model\User::GetUserSession();
+			if(isset($userInSession))
 			{
-				try
+				$html = $recipeView->DoAddRecipeForm();
+				if($recipeView->TriedToAddRecipe())
 				{
-					$recipeInfo = array(
-						\Model\Recipe::RECIPENAME => $recipeView->GetRecipeName(),
-						\Model\Recipe::INGREDIENT => $recipeView->GetRecipeIngredient(),
-						\Model\Recipe::DESCRIPTION => $recipeView->GetRecipeDescription(),
-						\Model\Recipe::SEVERITY => $recipeView->GetSeverity(),
-					);
-					$recipe = new \Model\Recipe($recipeInfo);
-					if($recipeModel->DoAddRecipe($recipe))
+					try
 					{
-						\Common\Page::AddSuccessmessage(\Common\String::SUCCESS_ADD_RECIPE);
+						$recipeInfo = array(
+							\Model\Recipe::USERID => $userInSession->GetUserID(),
+							\Model\Recipe::RECIPENAME => $recipeView->GetRecipeName(),
+							\Model\Recipe::INGREDIENT => $recipeView->GetRecipeIngredient(),
+							\Model\Recipe::DESCRIPTION => $recipeView->GetRecipeDescription(),
+							\Model\Recipe::SEVERITY => $recipeView->GetSeverity(),
+						);
+						$recipe = new \Model\Recipe($recipeInfo);
+						if($recipeModel->DoAddRecipe($recipe))
+						{
+							\Common\Page::AddSuccessmessage(\Common\String::SUCCESS_ADD_RECIPE);
+						}
+					}
+					catch(\Exception $e)
+					{
+						\Common\Page::AddErrormessage($e->getMessage());
 					}
 				}
-				catch(\Exception $e)
+			}
+			else 
+			{
+				\Common\Page::AddErrormessage(\Common\String::NOT_LOGGED_IN);
+			}
+		}
+		else if (\View\NavigationView::GetRecipeQuery() == \View\NavigationView::EDIT)
+		{
+			$html = "";
+			$recipeID = $recipeView->GetRecipeIDQuery();
+			$userInSession = \Model\User::GetUserSession();
+			if(isset($recipeID) && isset($userInSession))
+			{
+				$recipe = $recipeModel->GetRecipeByID($recipeID);
+				if($recipe->GetUserID() == $userInSession->GetUserID())
 				{
-					\Common\Page::AddErrormessage($e->getMessage());
+					$recipeModel->StoreEditRecipe($recipe);
+					$recipeInSession = \Model\Recipe::GetRecipeSession();
+					$html = $recipeView->DoEditRecipeForm($recipe);
+					if($recipeView->TriedToEditRecipe())
+					{
+						try
+						{
+							$recipeInSession = \Model\Recipe::GetRecipeSession();
+							$recipeInfo = array(
+								\Model\Recipe::RECIPEID => $recipeInSession->GetRecipeID(),
+								\Model\Recipe::RECIPENAME => $recipeView->GetRecipeName(),
+								\Model\Recipe::INGREDIENT => $recipeView->GetRecipeIngredient(),
+								\Model\Recipe::DESCRIPTION => $recipeView->GetRecipeDescription(),
+								\Model\Recipe::SEVERITY => $recipeView->GetSeverity(),
+							);
+							$recipe = new \Model\Recipe($recipeInfo);
+								if($recipeModel->DoUpdateRecipe($recipe))
+								{
+									\Common\Page::AddSuccessmessage(\Common\String::SUCCESS_EDIT_RECIPE);
+								}
+							
+						}
+						catch(\Exception $e)
+						{
+							\Common\Page::AddErrormessage($e->getMessage());
+						}
+					}
 				}
+				else
+				{
+					\Common\Page::AddErrormessage(\Common\String::UPDATE_RECIPE_NOT_YOURS);
+				}
+			}
+			else if(!isset($recipeID))
+			{
+				\Common\Page::AddErrormessage(\Common\String::NO_RECIPE_ID);
+			}
+			else
+			{
+				\Common\Page::AddErrormessage(\Common\String::NOT_LOGGED_IN);
+			}
+		}
+		else if (\View\NavigationView::GetRecipeQuery() == \View\NavigationView::DELETE)
+		{
+			$html = "";
+			$recipeID = $recipeView->GetRecipeIDQuery();
+			$userInSession = \Model\User::GetUserSession();
+			if(isset($recipeID) && isset($userInSession))
+			{
+				$recipe = $recipeModel->GetRecipeByID($recipeID);
+				if($recipe)
+				{
+					if($recipe->GetUserID() == $userInSession->GetUserID())
+					{
+						try
+						{
+							if($recipeModel->DoDeleteRecipe($recipeID))
+							{
+								\Common\Page::AddSuccessmessage(\Common\String::SUCCESS_DELETE_RECIPE);
+							}
+						}
+						catch(\Exception $e)
+						{
+							\Common\Page::AddErrormessage($e->getMessage());
+						}
+					}
+					else
+					{
+						\Common\Page::AddErrormessage(\Common\String::DELETE_RECIPE_NOT_YOURS);
+					}
+				}
+				else 
+				{
+					\Common\Page::AddErrormessage(\Common\String::RECIPE_DOES_NOT_EXIST);
+				}
+			}
+			else if(!isset($recipeID))
+			{
+				\Common\Page::AddErrormessage(\Common\String::NO_RECIPE_ID);
+			}
+			else
+			{
+				\Common\Page::AddErrormessage(\Common\String::NOT_LOGGED_IN);
 			}
 		}
 		else
 		{
+			$html = "";
 			$recipeID = $recipeView->GetRecipeID();
 			$recipe = $recipeModel->GetRecipeByID($recipeID);
+			
+			$userInSession = \Model\User::GetUserSession();
+			// if the recipe Exists
 			if($recipe)
 			{
-				$html = $recipeView->DoRecipe($recipe);	
+				if(isset($userInSession))
+				{
+					// store a boolean to see if the user is the author
+					$isAuthor = $recipeModel->IsAuthor($userInSession, $recipe->GetUserID());
+				}
+				else {
+					// if not logged in you're defintly not the author
+					$isAuthor = false;
+				}
+				
+				// store the authors username
+				$user = $userModel->GetUserByID($recipe->GetUserID());
+				$recipe->SetAuthor($user->GetUsername());
+				
+				// make the recipe
+				$html = $recipeView->DoRecipe($recipe, $isAuthor);	
 			}
 			else
 			{

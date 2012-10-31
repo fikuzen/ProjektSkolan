@@ -9,6 +9,7 @@ class NavigationView
 	private static $m_recipe = "recipe";
 	private static $m_register = "register";
 	private static $m_profile = "profile";
+	private static $m_recipeID = "recipeid";
 	
 	CONST START = "index";
 	CONST LISTNING = "list";
@@ -21,12 +22,14 @@ class NavigationView
 	public static function IsAdminQuery() { return isset($_GET[self::$m_admin]); }
 	public static function IsUserQuery() { return isset($_GET[self::$m_user]); }
 	public static function IsRecipeQuery() { return isset($_GET[self::$m_recipe]); }
+	public static function IsRecipeIDQuery() { return isset($_GET[self::$m_recipeID]); }
 	public static function IsRegisterQuery() { return isset($_GET[self::$m_register]); }
 	public static function IsProfileQuery() { return isset($_GET[self::$m_profile]); }
 	
 	public static function GetAdminQuery() { return $_GET[self::$m_admin]; }
 	public static function GetUserQuery() { return $_GET[self::$m_user]; }
 	public static function GetRecipeQuery() { return $_GET[self::$m_recipe]; }
+	public static function GetRecipeIDQuery() { return $_GET[self::$m_recipeID]; }
 	public static function GetRegisterQuery() { return $_GET[self::$m_register]; }
 	public static function GetProfileQuery() { return $_GET[self::$m_profile]; }
    
@@ -40,8 +43,8 @@ class NavigationView
 	public static function GetRecipeStartLink() { return "?" . self::$m_recipe . "=". self::START; }
 	public static function GetRecipeListLink() { return "?" . self::$m_recipe . "=". self::LISTNING; }
 	public static function GetRecipeAddLink() { return "?" . self::$m_recipe . "=". self::ADD; }
-	public static function GetRecipeDeleteLink() { return "?" . self::$m_recipe . "=". self::DELETE; }
-	public static function GetRecipeUpdateLink() { return "?" . self::$m_recipe . "=". self::EDIT; }
+	public static function GetRecipeDeleteLink($recipeID) { return "?" . self::$m_recipe . "=". self::DELETE . "&" . self::$m_recipeID . "=" . $recipeID; }
+	public static function GetRecipeUpdateLink($recipeID) { return "?" . self::$m_recipe . "=". self::EDIT . "&" . self::$m_recipeID . "=" . $recipeID; }
 	public static function GetRecipeLink($recipeID) { return "?" . self::$m_recipe . "=" . $recipeID; }
 	
 	// User Links

@@ -253,7 +253,13 @@ class AuthView
 						<label for=\"" . \Common\String::REPEAT_PASSWORD . "\">Lösenord igen</label>
 						<input type=\"password\" id=\"" . \Common\String::REPEAT_PASSWORD . "\" name=\"" . \Common\String::REPEAT_PASSWORD . "\" />
 						<label for=\"" . \Common\String::SKILL . "\">Kunskapsnivå</label>
-						<input type=\"number\" min=\"" . \Common\String::SKILL_MIN . "\" max=\"" . \Common\String::SKILL_MAX . "\" id=\"" . \Common\String::SKILL . "\" name=\"" . \Common\String::SKILL . "\" /><br />
+						<select id=\"" . \Common\String::SKILL . "\" name=\"" . \Common\String::SKILL . "\" />";
+		for($skill = \Common\String::SKILL_MIN; $skill <= \Common\String::SKILL_MAX; $skill++)
+		{
+			$html .= "<option value=\"$skill\">" . \Common\String::$skillText[$skill] . "</option>";
+		}
+		$html .= "
+						</select><br />
 						<input class=\"left\" type=\"submit\" name=\"" . \Common\String::REGISTER_SUBMIT . "\" value=\"" . \Common\String::REGISTER_SUBMIT_TEXT . "\" />
 					</form>
 				";

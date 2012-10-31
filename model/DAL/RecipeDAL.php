@@ -7,12 +7,6 @@ require_once ('model/object/Recipe.php');
 class RecipeDAL
 {
 	const table_name = "Recipe";
-	private static $m_fields = array("id" => "RecipeID", "name" => "RecipeName", "ingredient" => "RecipeIngredient", "description" => "RecipeDescription", "severity" => "Severity");
-	private static $m_recipdID = "id";
-	private static $m_recipeName = "name";
-	private static $m_recipeIngredient = "ingredient";
-	private static $m_recipeDescription = "description";
-	private static $m_severity = "severity";
 
 	private static $m_db;
 
@@ -49,8 +43,7 @@ class RecipeDAL
 	public static function GetRecipeByID($recipeID)
 	{
 		$table = RecipeDAL::table_name;
-		$fieldToMatch = "RecipeID";
-		$query = "SELECT * FROM $table WHERE $fieldToMatch = ?";
+		$query = "SELECT * FROM $table WHERE " . Recipe::RECIPEID . " = ?";
 
 		$stmt = self::$m_db->Prepare($query);
 
@@ -77,8 +70,7 @@ class RecipeDAL
 	public static function GetRecipeByName($recipename)
 	{
 		$table = RecipeDAL::table_name;
-		$fieldToMatch = "RecipeName";
-		$query = "SELECT * FROM $table WHERE $fieldToMatch = ?";
+		$query = "SELECT * FROM $table WHERE " . Recipe::RECIPENAME . " = ?";
 
 		$stmt = self::$m_db->Prepare($query);
 
@@ -104,28 +96,29 @@ class RecipeDAL
 	 * @param $recipe , Recipe object
 	 * @return bool
 	 */
-	static public function AddRecipe(Recipe $recipe)
+	public static function AddRecipe(Recipe $recipe)
 	{
 		$table = RecipeDAL::table_name;
 		$sqlQuery = "INSERT INTO $table ("
-							. self::$m_fields[self::$m_recipeName] . ", " 
-							. self::$m_fields[self::$m_recipeIngredient] . ", " 
-							. self::$m_fields[self::$m_recipeDescription] . ", " 
-							. self::$m_fields[self::$m_severity] . ") 
-						VALUES (?, ?, ?, ?)";
+							. Recipe::USERID . ", "
+							. Recipe::RECIPENAME . ", " 
+							. Recipe::INGREDIENT . ", " 
+							. Recipe::DESCRIPTION . ", " 
+							. Recipe::SEVERITY . ") 
+						VALUES (?, ?, ?, ?, ?)";
 
 		$stmt = self::$m_db->Prepare($sqlQuery);
 
+		$userId = $recipe->GetUserID();
 		$recipeName = $recipe->GetRecipeName();
 		$recipeIngredient = $recipe->GetRecipeIngredient();
 		$recipeDescription = $recipe->GetRecipeDescription();
 		$severity = $recipe->GetSeverity();
 
-		$stmt->bind_param("sssi", $recipeName, $recipeIngredient, $recipeDescription, $severity);
+		$stmt->bind_param("isssi", $userId, $recipeName, $recipeIngredient, $recipeDescription, $severity);
 
 		try
 		{
-			// Execute the query and return the USERID
 			$recipeID = self::$m_db->Insert($stmt);
 		}
 		catch (exception $e)
@@ -141,16 +134,16 @@ class RecipeDAL
 	 * 
 	 * @return bool
 	 */
-	static public function UpdateRecipe(Recipe $recipe)
+	public static function UpdateRecipe(Recipe $recipe)
 	{
 		$table = RecipeDAL::table_name;
 		
 		$sqlQuery = "UPDATE $table SET " 
-						. self::$m_fields[self::$m_recipeName] . "=?, " 
-						. self::$m_fields[self::$m_recipeIngredient] . "=?, " 
-						. self::$m_fields[self::$m_recipeDescription] . "=?, " 
-						. self::$m_fields[self::$m_severity] . " 
-						WHERE " . self::$m_fields[self::$m_recipeID] . "=?";
+						. Recipe::RECIPENAME . "=?, " 
+						. Recipe::INGREDIENT . "=?, " 
+						. Recipe::DESCRIPTION . "=?, " 
+						. Recipe::SEVERITY . "=? 
+						WHERE " . Recipe::RECIPEID . "=?";
 		
 		$stmt = self::$m_db->Prepare($sqlQuery);
 		
@@ -179,10 +172,11 @@ class RecipeDAL
 	 *
 	 * @return bool
 	 */
-	static public function DeleteRecipe($recipeID)
+	public static function DeleteRecipe($recipeID)
 	{
+		var_dump($recipeID);
 		$table = RecipeDAL::table_name;
-		$sqlQuery = "DELETE FROM $table WHERE " . self::$m_fields[self::$m_recipdID] . "=?";
+		$sqlQuery = "DELETE FROM $table WHERE " . Recipe::RECIPEID . "=?";
 
 		$stmt = self::$m_db->Prepare($sqlQuery);
 
@@ -201,7 +195,7 @@ class RecipeDAL
 
 		return $return;
 	}
-
+	
 	public static function test(Database $db)
 	{
 		$errorMessages = array();

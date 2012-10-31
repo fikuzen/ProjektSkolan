@@ -31,7 +31,7 @@ class User
 		$this->SetSkill($userInfo[self::SKILL]);
 		if(isset($userInfo[self::UPDATED]))
 		{
-			$this->setUpdated($userInfo[self::UPDATED]);
+			$this->SetUpdated($userInfo[self::UPDATED]);
 		}
 		else
 		{
@@ -53,7 +53,7 @@ class User
 		return $this->m_user[self::USERID];
 	}
 
-	public function getUsername()
+	public function GetUsername()
 	{
 		return $this->m_user[self::USERNAME];
 	}

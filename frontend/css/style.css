@@ -288,7 +288,8 @@ button.left {
 	float: left;
 }
 
-input[type="submit"].secondButton {
+input[type="submit"].secondButton,
+button.secondButton {
 	float: left;
 	margin-left: 20px;
 }

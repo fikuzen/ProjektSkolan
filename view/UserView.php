@@ -116,7 +116,6 @@ class UserView
 	{
 		$html = "
 			<form class=\"editProfile\" method=\"post\">
-				<input type=\"hidden\" name=\"userid\" value=\"" . $user->GetUserID() . "\" />
 				<h3>" . $user->GetUsername() . "</h3>
 				<label for=\"" . \Common\String::EMAIL . "\">Email</label>
 				<input type=\"email\" id=\"" . \Common\String::EMAIL . "\" name=\"" . \Common\String::EMAIL . "\" value=\"" . $user->GetEmail() . "\" />
