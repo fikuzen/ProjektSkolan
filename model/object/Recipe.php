@@ -2,8 +2,6 @@
 
 namespace Model;
 
-require_once '\Model\Dal\UserDAL.php';
-
 class Recipe
 {
 	private $m_recipe;
