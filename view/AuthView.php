@@ -196,11 +196,11 @@ class AuthView
 
 		$html = "
                <form method=\"post\">
-                  <label for=\"" . \Common\String::USERNAME . "\">Användarnamn</label>
+                  <label for=\"" . \Common\String::USERNAME . "\">" . \Common\String::USERNAME_TEXT . "</label>
                   <input type=\"text\" id=\"" . \Common\String::USERNAME . "\" value=\"" . $this->m_username . "\" name=\"" . \Common\String::USERNAME . "\" />
-                  <label for=\"" . \Common\String::PASSWORD . "\">Lösenord</label>
+                  <label for=\"" . \Common\String::PASSWORD . "\">" . \Common\String::PASSWORD_TEXT . "</label>
                   <input type=\"password\" id=\"" . \Common\String::PASSWORD . "\" value=\"" . $this->m_password . "\" name=\"" . \Common\String::PASSWORD . "\" />
-                  <label for=\"" . \Common\String::REMEMBER . "\">Kom ihåg mig</label>
+                  <label for=\"" . \Common\String::REMEMBER . "\">" . \Common\String::REMEMBER_TEXT . "</label>
                   <input type=\"checkbox\"";
 		// If there's a cookie check the checkbox
 		if(isset($_COOKIE[\Common\String::COOKIE_USER]))
@@ -210,7 +210,7 @@ class AuthView
 		$html .= "
       												value=\"remember\" id=\"" . \Common\String::REMEMBER . "\" name=\"" . \Common\String::REMEMBER . "\" />
                   <input type=\"submit\" name=\"" . \Common\String::LOGIN_SUBMIT . "\" value=\"" . \Common\String::LOGIN_SUBMIT_TEXT . "\" />  
-                  <p class=\"small\">Har du inget konto än så <a href=\"" . NavigationView::GetRegisterLink() . "\">Registrera dig</a></p>
+                  <p class=\"small\">No account? <a href=\"" . NavigationView::GetRegisterLink() . "\">" . \Common\String::REGISTER_HERE_TEXT . "</a></p>
                </form>
             ";
 		return $html;
@@ -242,17 +242,20 @@ class AuthView
 	 */
 	public function DoRegisterForm()
 	{
+		$usernameValue = $this->GetUsername() == null ? "" : $this->GetUsername();
+		$emailValue = $this->GetEmail() == null ? "" : $this->GetEmail();
+		
 		$html = "
 					<form method=\"post\">
-						<label for=\"" . \Common\String::USERNAME . "\">Användarnamn</label>
-						<input type=\"text\" id=\"" . \Common\String::USERNAME . "\" name=\"" . \Common\String::USERNAME . "\" />
-						<label for=\"" . \Common\String::EMAIL . "\">Email</label>
-						<input type=\"email\" id=\"" . \Common\String::EMAIL . "\" name=\"" . \Common\String::EMAIL . "\" />
-						<label for=\"" . \Common\String::PASSWORD . "\">Lösenord</label>
+						<label for=\"" . \Common\String::USERNAME . "\">" . \Common\String::USERNAME_TEXT . "</label>
+						<input type=\"text\" id=\"" . \Common\String::USERNAME . "\" value=\"$usernameValue\" name=\"" . \Common\String::USERNAME . "\" />
+						<label for=\"" . \Common\String::EMAIL . "\">" . \Common\String::EMAIL_TEXT . "</label>
+						<input type=\"email\" id=\"" . \Common\String::EMAIL . "\" value=\"$emailValue\" name=\"" . \Common\String::EMAIL . "\" />
+						<label for=\"" . \Common\String::PASSWORD . "\">" . \Common\String::PASSWORD_TEXT . "</label>
 						<input type=\"password\" id=\"" . \Common\String::PASSWORD . "\" name=\"" . \Common\String::PASSWORD . "\" />
-						<label for=\"" . \Common\String::REPEAT_PASSWORD . "\">Lösenord igen</label>
+						<label for=\"" . \Common\String::REPEAT_PASSWORD . "\">" . \Common\String::PASSWORD_REPEAT_TEXT . "</label>
 						<input type=\"password\" id=\"" . \Common\String::REPEAT_PASSWORD . "\" name=\"" . \Common\String::REPEAT_PASSWORD . "\" />
-						<label for=\"" . \Common\String::SKILL . "\">Kunskapsnivå</label>
+						<label for=\"" . \Common\String::SKILL . "\">" . \Common\String::SKILL_TEXT . "</label>
 						<select id=\"" . \Common\String::SKILL . "\" name=\"" . \Common\String::SKILL . "\" />";
 		for($skill = \Common\String::SKILL_MIN; $skill <= \Common\String::SKILL_MAX; $skill++)
 		{

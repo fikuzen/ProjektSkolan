@@ -6,7 +6,7 @@ require_once ('model/object/Recipe.php');
 
 class RecipeDAL
 {
-	const table_name = "Recipe";
+	const table_name = "recipe";
 
 	private static $m_db;
 

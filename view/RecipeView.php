@@ -176,6 +176,27 @@ class RecipeView
 		return $html;
 	}
 
+	public function DoRecipeMenu($isLoggedIn, $chosedSeverity = -1)
+	{
+		$html = "
+			<ul class=\"left severity\">";
+		if($isLoggedIn)
+		{
+			$html .= "<li><a href=\"" . NavigationView::GetRecipeSeverityLink(\View\NavigationView::YOUR_SEVERITY) . "\"><button class=\"recipeMatchYourLevel\">Matcha din nivå</button></a></li>";
+		}
+		
+		for($severity = \Common\String::SEVERITY_MIN; $severity <= \Common\String::SEVERITY_MAX; $severity++)
+		{
+			if($severity == $chosedSeverity)
+				$html .= "<li><a href=\"" . NavigationView::GetRecipeSeverityLink($severity) . "\"><button class=\"recipeSeverityButton chosedSeverity\">" . \Common\String::$severityButtonText[$severity] . "</button></a></li>";
+			else 
+				$html .= "<li><a href=\"" . NavigationView::GetRecipeSeverityLink($severity) . "\"><button class=\"recipeSeverityButton\">" . \Common\String::$severityButtonText[$severity] . "</button></a></li>";
+		}
+		$html .= "
+			</ul>";
+		return $html;		
+	}
+
 	/**
 	 * List all recipes
 	 *
@@ -187,12 +208,42 @@ class RecipeView
 			<ul>";
 		foreach($recipes as $recipe)
 		{
-			$html .= "<li><a href=\"" . NavigationView::GetRecipeLink($recipe->GetRecipeID()) . "\">" . $recipe->GetRecipeName() . "</a></li>";
+			$html .= "<li><a href=\"" . NavigationView::GetRecipeLink($recipe->GetRecipeID()) . "\"><span class=\"severity" . $recipe->GetSeverity() . "\">" . $recipe->GetRecipeName() . "</span></a></li>";
 		}
 		$html .= "
 			</ul>
 		";
 		return $html;
 	}
-
+	/**
+	 * List all recipes with a selected severity
+	 * 
+	 * @return $html, generated html code 
+	 */
+	public function DoSelectedRecipeList($recipes, $severity)
+	{
+		$recipeToShow;
+		$html = "";
+		foreach($recipes as $recipe)
+		{
+			if(NavigationView::GetSeverityQuery() == NavigationView::YOUR_SEVERITY)
+			{
+				if($recipe->GetSeverity() <= $severity)
+				{
+					$recipeToShow[] = $recipe;
+				}
+			}
+			else {
+				if($recipe->GetSeverity() == $severity)
+				{
+					$recipeToShow[] = $recipe;
+				}
+			}
+		}
+		foreach($recipeToShow as $recipe)
+		{
+			$html .= "<li><a href=\"" . NavigationView::GetRecipeLink($recipe->GetRecipeID()) . "\"><span class=\"severity" . $recipe->GetSeverity() . "\">" . $recipe->GetRecipeName() . "</span></a></li>";
+		}
+		return $html;
+	}
 }

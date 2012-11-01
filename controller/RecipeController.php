@@ -20,13 +20,33 @@ class RecipeController
 		$recipeModel = new \Model\RecipeModel($this->m_db);
 		$userModel = new \Model\UserModel($this->m_db);
 		
+		$userInSession = \Model\User::GetUserSession();
+		
 		if(\View\NavigationView::GetRecipeQuery() == \View\NavigationView::START || \View\NavigationView::GetRecipeQuery() == \View\NavigationView::LISTNING)
 		{
 			$html = "";
 			$recipes = $recipeModel->GetRecipes();
 			if($recipes)
 			{
-				$html = $recipeView->DoRecipeList($recipes);
+				$html .= $recipeView->DoRecipeList($recipes);
+				if(\View\NavigationView::IsSeverityQuery())
+				{
+					$severity = \View\NavigationView::GetSeverityQuery();
+					$html = $recipeView->DoRecipeMenu(isset($userInSession), $severity);
+					if(is_numeric($severity))
+					{
+						$html .= $recipeView->DoSelectedRecipeList($recipes, $severity);
+					}
+					else if($severity == \View\NavigationView::YOUR_SEVERITY)
+					{
+						$severity = $userInSession->GetSkill();
+						$html .= $recipeView->DoSelectedRecipeList($recipes, $severity);
+					}
+					else 
+					{
+						\Common\Page::AddErrormessage(\Common\String::FAIL_SEVERITY_MATCH);
+					}
+				}
 			}
 			else
 			{
@@ -37,7 +57,6 @@ class RecipeController
 		else if (\View\NavigationView::GetRecipeQuery() == \View\NavigationView::ADD)
 		{
 			$html = "";
-			$userInSession = \Model\User::GetUserSession();
 			if(isset($userInSession))
 			{
 				$html = $recipeView->DoAddRecipeForm();
@@ -73,7 +92,6 @@ class RecipeController
 		{
 			$html = "";
 			$recipeID = $recipeView->GetRecipeIDQuery();
-			$userInSession = \Model\User::GetUserSession();
 			if(isset($recipeID) && isset($userInSession))
 			{
 				$recipe = $recipeModel->GetRecipeByID($recipeID);
@@ -125,7 +143,6 @@ class RecipeController
 		{
 			$html = "";
 			$recipeID = $recipeView->GetRecipeIDQuery();
-			$userInSession = \Model\User::GetUserSession();
 			if(isset($recipeID) && isset($userInSession))
 			{
 				$recipe = $recipeModel->GetRecipeByID($recipeID);
@@ -170,7 +187,6 @@ class RecipeController
 			$recipeID = $recipeView->GetRecipeID();
 			$recipe = $recipeModel->GetRecipeByID($recipeID);
 			
-			$userInSession = \Model\User::GetUserSession();
 			// if the recipe Exists
 			if($recipe)
 			{

@@ -49,14 +49,22 @@ class String
 	const DELETE_PROFILE_SUBMIT_TEXT = "Avregistrera mig";
 	const ADD_RECIPE_TEXT = "Lägg till recept";
 	const EDIT_RECIPE_SUBMIT_TEXT = "Spara recept";
-		// User Skill
+		// User labels & more
+		const USERNAME_TEXT = "Användarnamn";
+		const PASSWORD_TEXT = "Lösenord";
+		const PASSWORD_REPEAT_TEXT = "Lösenord igen";
+		const REMEMBER_TEXT = "Kom ihåg mig";
+		const EMAIL_TEXT = "Email";
+		const SKILL_TEXT = "Kunskapsnivå";
+		const REGISTER_HERE_TEXT = "Registrera dig";
 		public static $skillText = array(1 => "Rätt kass", 2 => "Duglig", 3 => "Matälskare", 4 => "Krögare", 5 => "Mästerkock");
-		// Recipe labels
+		// Recipe labels & more
 		const RECIPE_NAME_TEXT = "Receptnamn";
 		const RECIPE_INGREDIENT_TEXT = "Ingredienser";
 		const RECIPE_DESCRIPTION_TEXT = "Instruktioner";
 		const RECIPE_SEVERITY_TEXT = "För att klara av detta recept bör du kunna";
 		public static $recipeSeverityText = array(1 => "öppna kylskåpet", 2 => "koka tevatten", 3 => "skala potatis", 4 => "filéa en fisk", 5 => "vinna sveriges mästerkock");
+		public static $severityButtonText  = array(1 => "Superlätt", 2 => "Lätt", 3 => "Medelsvårt", 4 => "Svårt", 5 => "Supersvårt");
 		const EDIT_RECIPE_TEXT = "Editera recept";
 		const DELETE_RECIPE_TEXT = "Ta bort recept";
 		// Error messages
@@ -72,6 +80,7 @@ class String
 		const FAIL_GET_USERS = "Det gick inte att hämta alla användare.";
 		const FAIL_GET_RECIPE = "Det gick inte att visa de valda receptet";
 		const FAIL_GET_RECIPES = "Det fanns inga recept att hämta.";
+		const FAIL_SEVERITY_MATCH = "Det finns inga recept som matchar svårighetsgraden";
 		// Success Messages
 		const LOGIN_SUCCESS = "Du loggades in.";
 		const REGISTER_SUCCESS = "Du registrerades.";

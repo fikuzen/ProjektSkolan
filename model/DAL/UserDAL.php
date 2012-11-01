@@ -6,7 +6,7 @@ require_once ('model/object/User.php');
 
 class UserDAL
 {
-	const table_name = "User";
+	const table_name = "user";
 
 	private static $m_db;
 
@@ -100,7 +100,8 @@ class UserDAL
 	 */
 	static public function AddUser(User $user)
 	{
-		$sqlQuery = "INSERT INTO User (Username, Password, Email, Skill) VALUES (?, ?, ?, ?)";
+		$table = UserDAL::table_name;
+		$sqlQuery = "INSERT INTO $table (Username, Password, Email, Skill) VALUES (?, ?, ?, ?)";
 
 		$stmt = self::$m_db->Prepare($sqlQuery);
 
@@ -132,8 +133,9 @@ class UserDAL
 	 */
 	static public function UpdateUserProfile(User $user)
 	{
+		$table = UserDAL::table_name;
 		// Query for adding a user to the databse
-		$sqlQuery = "UPDATE User SET Email=?, Skill=? WHERE UserID=?";
+		$sqlQuery = "UPDATE $table SET Email=?, Skill=? WHERE UserID=?";
 		
 		// Prepare the statement
 		$stmt = self::$m_db->Prepare($sqlQuery);
@@ -163,7 +165,9 @@ class UserDAL
 	 */
 	static public function DeleteUser($userID)
 	{
-		$sqlQuery = "DELETE FROM User WHERE UserID=?";
+		$table = UserDAL::table_name;
+		
+		$sqlQuery = "DELETE FROM $table WHERE UserID=?";
 
 		$stmt = self::$m_db->Prepare($sqlQuery);
 

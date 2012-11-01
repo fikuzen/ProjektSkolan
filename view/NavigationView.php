@@ -10,12 +10,14 @@ class NavigationView
 	private static $m_register = "register";
 	private static $m_profile = "profile";
 	private static $m_recipeID = "recipeid";
+	private static $m_severity = "severity";
 	
 	CONST START = "index";
 	CONST LISTNING = "list";
 	CONST ADD = "add";
 	CONST DELETE = "delete";
 	CONST EDIT = "edit";
+	CONST YOUR_SEVERITY = "MatchSeverity";
    
    private static $m_testURL = "/test.php";
 	
@@ -23,6 +25,7 @@ class NavigationView
 	public static function IsUserQuery() { return isset($_GET[self::$m_user]); }
 	public static function IsRecipeQuery() { return isset($_GET[self::$m_recipe]); }
 	public static function IsRecipeIDQuery() { return isset($_GET[self::$m_recipeID]); }
+	public static function IsSeverityQuery() { return isset($_GET[self::$m_severity]); }
 	public static function IsRegisterQuery() { return isset($_GET[self::$m_register]); }
 	public static function IsProfileQuery() { return isset($_GET[self::$m_profile]); }
 	
@@ -30,6 +33,7 @@ class NavigationView
 	public static function GetUserQuery() { return $_GET[self::$m_user]; }
 	public static function GetRecipeQuery() { return $_GET[self::$m_recipe]; }
 	public static function GetRecipeIDQuery() { return $_GET[self::$m_recipeID]; }
+	public static function GetSeverityQuery() { return $_GET[self::$m_severity]; }
 	public static function GetRegisterQuery() { return $_GET[self::$m_register]; }
 	public static function GetProfileQuery() { return $_GET[self::$m_profile]; }
    
@@ -46,6 +50,7 @@ class NavigationView
 	public static function GetRecipeDeleteLink($recipeID) { return "?" . self::$m_recipe . "=". self::DELETE . "&" . self::$m_recipeID . "=" . $recipeID; }
 	public static function GetRecipeUpdateLink($recipeID) { return "?" . self::$m_recipe . "=". self::EDIT . "&" . self::$m_recipeID . "=" . $recipeID; }
 	public static function GetRecipeLink($recipeID) { return "?" . self::$m_recipe . "=" . $recipeID; }
+	public static function GetRecipeSeverityLink($severity) { return "?" . self::$m_recipe . "=" . self::LISTNING . "&" . self::$m_severity . "=" . $severity; }
 	
 	// User Links
 	public static function GetUserStartLink() { return "?" . self::$m_user . "=". self::START; }

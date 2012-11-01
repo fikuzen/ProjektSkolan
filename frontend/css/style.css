@@ -381,6 +381,89 @@ form p{
 	100% { top: -100%;}
 }
 
+/**
+ * 	Recipes
+ */
+
+.severity {
+	margin-left: 0;
+}
+
+.chosedSeverity,
+.chosedSeverity:hover {
+	background-color: rgba(209,178,134, .3);
+	box-shadow: 
+		0 -1px 0 rgba(0, 0, 0, 0.2),
+		0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.recipeSeverityButton {
+	min-width: 140px;
+	margin: 4px 0;
+}
+
+.recipeMatchYourLevel {
+	margin: 0 0 40px 0;
+}
+
+.severity1 , .severity2 , .severity3 , .severity4 , .severity5{
+	margin: 5px 0;
+	padding: 8px 4px;
+	display: inline-block;
+	border-radius: 4px;
+	
+	-webkit-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
+	transition: all 0.2s ease-in-out;
+}
+.severity1:hover, .severity2:hover, .severity3:hover, .severity4:hover, .severity5:hover{
+	color: #8D4840;
+}
+
+.severity1 {
+	background: rgba(213,220,139, .7);
+}
+
+	.severity1:hover {
+		background: rgb(213,220,139);
+	}
+
+.severity2 {
+	background: rgba(227,232,178, .7);
+}
+
+	.severity2:hover {
+		background: rgb(227,232,178);
+	}
+
+.severity3 {
+	background: rgba(214,176,119, .7);
+}
+
+	.severity3:hover {
+		background: rgb(214,176,119);
+	}
+
+.severity4 {
+	background: rgba(232,183,178, .7);
+}
+
+	.severity4:hover {
+		background: rgb(232,183,178);
+	}
+
+.severity5 {
+	background: rgba(214,128,119, .7);
+}
+
+	.severity5:hover {
+		background: rgb(214,128,119);
+	}
+
+.recipeButton {
+	clear: both;
+	margin: 10px;
+}
 
 /**
  * 	GENERICS
