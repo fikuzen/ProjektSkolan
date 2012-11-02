@@ -172,14 +172,17 @@ class RecipeView
 	 */
 	public function DoAddRecipeForm()
 	{
+		$recipeName = ($this->GetRecipeName() == null) ? "" : $this->GetRecipeName();
+		$recipeIngredient = ($this->GetRecipeIngredient() == null) ? "" : $this->GetRecipeIngredient();
+		$recipeDescription = ($this->GetRecipeDescription() == null) ? "" : $this->GetRecipeDescription();
 		$html = "
 			<form class=\"addRecipe\" method=\"post\">
 				<label for=\"" . \Common\String::RECIPE_NAME . "\">" . \Common\String::RECIPE_NAME_TEXT . "</label>
-				<input type=\"text\" id=\"" . \Common\String::RECIPE_NAME . "\" name=\"" . \Common\String::RECIPE_NAME . "\" />
+				<input type=\"text\" id=\"" . \Common\String::RECIPE_NAME . "\" name=\"" . \Common\String::RECIPE_NAME . "\" value=\"$recipeName\" />
 				<label for=\"" . \Common\String::RECIPE_INGREDIENT . "\">" . \Common\String::RECIPE_INGREDIENT_TEXT . "</label>
-				<textarea id=\"" . \Common\String::RECIPE_INGREDIENT . "\" name=\"" . \Common\String::RECIPE_INGREDIENT . "\"></textarea>
+				<textarea id=\"" . \Common\String::RECIPE_INGREDIENT . "\" name=\"" . \Common\String::RECIPE_INGREDIENT . "\">$recipeIngredient</textarea>
 				<label for=\"" . \Common\String::RECIPE_DESCRIPTION . "\">" . \Common\String::RECIPE_DESCRIPTION_TEXT . "</label>
-				<textarea id=\"" . \Common\String::RECIPE_DESCRIPTION . "\" name=\"" . \Common\String::RECIPE_DESCRIPTION . "\"></textarea>
+				<textarea id=\"" . \Common\String::RECIPE_DESCRIPTION . "\" name=\"" . \Common\String::RECIPE_DESCRIPTION . "\">$recipeDescription</textarea>
 				<label for=\"" . \Common\String::RECIPE_SEVERITY . "\">" . \Common\String::RECIPE_SEVERITY_TEXT . "</label>
 				<select name=\"" . \Common\String::RECIPE_SEVERITY . "\" id=\"" . \Common\String::RECIPE_SEVERITY . "\">";
 			for($i = 1; $i <= 5; $i++)

@@ -159,7 +159,7 @@ class UserView
 		$html = "
 			<ul>";
 		foreach ($users as $user) {
-			$html .= "<li><a href=\"" . NavigationView::GetUserProfileLink($user->GetUserID()) . "\">" . $user->GetUsername() . "</a></li>";	
+			$html .= "<li><a class=\"userLink\" href=\"" . NavigationView::GetUserProfileLink($user->GetUserID()) . "\">" . $user->GetUsername() . "</a></li>";	
 		}
 		$html .= "
 			</ul>

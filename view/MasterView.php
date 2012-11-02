@@ -66,13 +66,17 @@ class MasterView
 	
 	public function DoMainContent()
 	{
-		$html = "MainContent";
+		$html = "Det här projektet är skapat av Christoffer Rydberg som slutprojekt i kursen Webbutveckling med PHP.";
 		return $html;
 	}
 	
 	public function DoSidebar()
 	{
-		$html = "Sidebar";
+		$html = "
+					<a href=\"http://www.mat24.se\"><img src=\"http://qfcdn.com/templates/mat24.se/images/mat24se_logo.png\" width=\"275\" height=\"100\" alt=\"Mat 24\" /></a>
+					<a href=\"http://www.onlinepizza.se\"><img src=\"http://qfcdn.com/templates/onlinepizza.se/images/onlinepizzase_logo.png\" width=\"275\" height=\"75\" alt=\"OnlinePizza\" /></a>
+					<a href=\"http://www.spisa.nu\"><img src=\"http://sphotos-h.ak.fbcdn.net/hphotos-ak-snc6/254178_126126177468252_5843841_n.jpg\" width=\"275\" height=\"100\" alt=\"Spisa\" /></a>
+				";
 		return $html;
 	}
 	
