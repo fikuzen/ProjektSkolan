@@ -82,7 +82,7 @@ class MasterController
 		}
 		else 
 		{
-			$bodyNavigation = \View\NavigationView::GetStartNavigation();         
+			$bodyNavigation = \View\NavigationView::GetStartNavigation();
 			$bodyContentLeft = $masterView->DoMainContent();
 		}
 		

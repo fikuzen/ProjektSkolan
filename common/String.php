@@ -17,7 +17,6 @@ class String
 	const REPEAT_PASSWORD = "repeatPassword";
 	const REMEMBER = "remember";
 	const SKILL = "skill";
-	
 		const SKILL_MAX = "5";
 		const SKILL_MIN = "1";
 	const IS_ADMIN = 1;

@@ -217,7 +217,7 @@ class RecipeController
 				if(isset($userInSession))
 				{
 					// store a boolean to see if the user is the author
-					$isAdmin = ($userInSession->GetIsAdmin() == 1) ? true : false;
+					$isAdmin = ($userInSession->GetIsAdmin() == \Common\String::IS_ADMIN) ? true : false;
 					$isAuthor = $recipeModel->IsAuthor($userInSession, $recipe->GetUserID());
 				}
 				else {
