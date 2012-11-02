@@ -8,11 +8,21 @@ class Validator
    private static $m_emailRegExp = "/^[a-z0-9-_]+(\.[a-z0-9-_]+)?@[a-z0-9-]+(\.[a-z0-9-]+)?\.[a-z]{2,6}$/i";
 
    private static $m_passwordRegExp = "/^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/";
+	
+	private static $m_startLetterRegEx = "/^[a-zA-Z]{1}$/";
+	private static $m_recipeNameRegEx = "/^[a-zA-Z]{2}[a-zA-Z\s]{3,73}$/";
+	private static $m_ingredientAndDescriptionRegEx = "/^[a-zA-Z]{2}[a-zA-Z\s]{18,3998}$/";
 
    /* Errormessages */
    private static $m_errorMessages;
    private static $m_emailError = "emailError";
+	private static $m_recipeNameError = "recipeNameError";
+	private static $m_recipeIngredientError = "recipeIngredientError";
+	private static $m_recipeDescriptionError = "recipeDescriptionError";
    private static $m_usernameError = "usernameError";
+	private static $m_startLetterRecipeNameError = "startLetterRecipeNameError";
+	private static $m_startLetterIngredientError = "startLetterIngredientError";
+	private static $m_startLetterDescriptionError = "startLetterDescriptionError";
    private static $m_passwordError = "passwordError";
    private static $m_passwordAgainError = "passwordAgainError";
    private static $m_numberError = "numberError";
@@ -30,6 +40,69 @@ class Validator
       return self::$m_errorMessages;
    }
 
+	/**
+    * Validate an recipe name 
+    * @param $recipeName Recipe name
+    * @return bool
+    */
+	public function ValidateRecipeName($recipeName)
+	{
+		$recipeNameFirstLetter = substr($recipeName, 0, 1);
+		$recipeNameIsValid = preg_match(self::$m_startLetterRegEx, $recipeNameFirstLetter);
+      if(!$recipeNameIsValid)
+      {
+         self::$m_errorMessages[self::$m_startLetterRecipeNameError] = \Common\String::STARTLETTER_RECIPENAME;
+      }
+		$recipeNameIsValid  = preg_match(self::$m_recipeNameRegEx, $recipeName);
+		if(!$recipeNameIsValid)
+		{
+			self::$m_errorMessages[self::$m_recipeNameError] = \Common\String::RECIPENAME_LENGTH;
+		}
+      return $recipeNameIsValid;
+	}
+	
+	/**
+    * Validate an recipe name 
+    * @param $recipeName Recipe name
+    * @return bool
+    */
+	public function ValidateIngredient($ingredient)
+	{
+		$ingredientFirstLetter = substr($ingredient, 0, 1);
+		$recipeNameIsValid = preg_match(self::$m_startLetterRegEx, $ingredientFirstLetter);
+      if(!$recipeNameIsValid)
+      {
+         self::$m_errorMessages[self::$m_startLetterDescriptionError] = \Common\String::STARTLETTER_INGREDIENT;
+      }
+		$recipeNameIsValid  = preg_match(self::$m_ingredientAndDescriptionRegEx, $ingredient);
+		if(!$recipeNameIsValid)
+		{
+			self::$m_errorMessages[self::$m_recipeIngredientError] = \Common\String::INGREDIENT_LENGTH;
+		}
+      return $recipeNameIsValid;
+	}
+	
+	/**
+    * Validate an recipe name 
+    * @param $recipeName Recipe name
+    * @return bool
+    */
+	public function ValidateDescription($description)
+	{
+		$descriptionFirstLetter = substr($description, 0, 1);
+		$recipeNameIsValid = preg_match(self::$m_startLetterRegEx, $descriptionFirstLetter);
+      if(!$recipeNameIsValid)
+      {
+         self::$m_errorMessages[self::$m_startLetterDescriptionError] = \Common\String::STARTLETTER_DESCRIPTION;
+      }
+		$recipeNameIsValid  = preg_match(self::$m_ingredientAndDescriptionRegEx, $description);
+		if(!$recipeNameIsValid)
+		{
+			self::$m_errorMessages[self::$m_recipeDescriptionError] = \Common\String::DESCRIPTION_LENGTH;
+		}
+      return $recipeNameIsValid;
+	}
+	
    /**
     * Validate an Emailadress ex daniel@domain.se daniel.toll@lnu.se daniel@student.lnu.se
     * @param $email Email adress

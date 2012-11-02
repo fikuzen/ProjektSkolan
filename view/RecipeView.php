@@ -4,6 +4,50 @@ namespace View;
 
 class RecipeView
 {
+	private $m_validator;
+	private $m_errorMessages = array();
+
+	public function __construct()
+	{
+		$this->m_validator = new \Model\Validator();
+	}
+	
+	public function SetErrorMessages()
+	{
+		foreach($this->m_validator->GetErrorMessages() as $errorMessage)
+		{
+			$this->AddErrorMessage($errorMessage);
+		}
+	}
+
+	public function AddErrorMessage($error)
+	{
+		$this->m_errorMessages[] = $error;
+	}
+
+	/**
+	 * Get all error messages
+	 * 
+	 * @return array, error messages
+	 */
+	public function GetErrorMessages()
+	{
+		return $this->m_errorMessages;
+	}
+	
+	/**
+	 * Do errorlist
+	 *
+	 * @param $errorMessages, string array
+	 */
+	public function DoErrorList($errorMessages)
+	{
+		foreach($errorMessages as $message)
+		{
+			\Common\Page::AddErrorMessage($message);
+		}
+	}
+	
 	/**
 	 * Get the recipeID from the recipe query
 	 * @return $recipeID .. the value of the query
@@ -74,6 +118,26 @@ class RecipeView
 		return isset($_POST[\Common\String::RECIPE_SEVERITY]) ? $_POST[\Common\String::RECIPE_SEVERITY] : NULL;
 	}
 
+	/**
+	 * Validate a recipe
+	 * 
+	 * @return boolean
+	 */
+	public function ValidateRecipe()
+	{
+		$this->m_validator->ValidateRecipeName($this->GetRecipeName());
+		$this->m_validator->ValidateIngredient($this->GetRecipeIngredient());
+		$this->m_validator->ValidateDescription($this->GetRecipeDescription());
+		
+		$this->SetErrorMessages();
+
+		if(count($this->GetErrorMessages()) != 0)
+		{
+			return false;
+		}
+		
+		return true;
+	}
 	/**
 	 * Recipe layout
 	 *
@@ -205,7 +269,7 @@ class RecipeView
 	public function DoRecipeList($recipes)
 	{
 		$html = "
-			<ul>";
+			<ul class=\"recipeList\">";
 		foreach($recipes as $recipe)
 		{
 			$html .= "<li><a href=\"" . NavigationView::GetRecipeLink($recipe->GetRecipeID()) . "\"><span class=\"severity" . $recipe->GetSeverity() . "\">" . $recipe->GetRecipeName() . "</span></a></li>";
@@ -223,7 +287,7 @@ class RecipeView
 	public function DoSelectedRecipeList($recipes, $severity)
 	{
 		$recipeToShow;
-		$html = "";
+		$html = "<ul class=\"recipeList\">";
 		foreach($recipes as $recipe)
 		{
 			if(NavigationView::GetSeverityQuery() == NavigationView::YOUR_SEVERITY)
@@ -240,10 +304,17 @@ class RecipeView
 				}
 			}
 		}
-		foreach($recipeToShow as $recipe)
+		if(count($recipeToShow) > 0)
 		{
-			$html .= "<li><a href=\"" . NavigationView::GetRecipeLink($recipe->GetRecipeID()) . "\"><span class=\"severity" . $recipe->GetSeverity() . "\">" . $recipe->GetRecipeName() . "</span></a></li>";
+			foreach($recipeToShow as $recipe)
+			{
+				$html .= "<li><a href=\"" . NavigationView::GetRecipeLink($recipe->GetRecipeID()) . "\"><span class=\"severity" . $recipe->GetSeverity() . "\">" . $recipe->GetRecipeName() . "</span></a></li>";
+			}
 		}
+		else {
+			throw new \Exception(\Common\Page::AddErrormessage(\Common\String::NO_RECIPES_MATCHES));
+		}
+		$html .= "</ul>";
 		return $html;
 	}
 }

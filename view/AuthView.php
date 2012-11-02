@@ -86,7 +86,7 @@ class AuthView
 			$this->m_validator->ValidateSkill($this->GetSkill());
 		}
 		
-		$this->setErrorMessages();
+		$this->SetErrorMessages();
 
 		if(count($this->GetErrorMessages()) != 0)
 		{

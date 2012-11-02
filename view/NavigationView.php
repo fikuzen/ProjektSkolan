@@ -79,11 +79,7 @@ class NavigationView
 		$navigation = "
 							<ul>
 								<li><a class=\"active\" href=" . self::GetStartLink() . ">Hem</a></li>
-								<li><a href=" . self::GetRecipeStartLink() . ">Recept</a>
-									<ul>
-										<li><a href=" . self::GetRecipeListLink() . ">Lista recept</a></li>
-									</ul>
-								</li>
+								<li><a href=" . self::GetRecipeStartLink() . ">Recept</a></li>
 								<li><a href=" . self::GetUserStartLink() . ">Användare</a></li>
 							</ul>
 						";
@@ -101,11 +97,7 @@ class NavigationView
 		$navigation = "
 							<ul>
 								<li><a href=" . self::GetStartLink() . ">Hem</a></li>
-								<li><a class=\"active\"  href=" . self::GetRecipeStartLink() . ">Recept</a>
-									<ul>
-										<li><a href=" . self::GetRecipeListLink() . ">Lista recept</a></li>
-									</ul>
-								</li>
+								<li><a class=\"active\"  href=" . self::GetRecipeStartLink() . ">Recept</a></li>
 								<li><a href=" . self::GetUserStartLink() . ">Användare</a></li>
 							</ul>
 						";
@@ -122,12 +114,7 @@ class NavigationView
 		$navigation = "
 							<ul>
 								<li><a href=" . self::GetStartLink() . ">Hem</a></li>
-								<li><a href=" . self::GetRecipeStartLink() . ">Recept</a>
-									<ul>
-										<li><a href=" . self::GetRecipeListLink() . ">Lista recept</a></li>
-										<li><a href=" . self::GetRecipeAddLink() . ">Lägg till recept</a></li>
-									</ul>
-								</li>
+								<li><a href=" . self::GetRecipeStartLink() . ">Recept</a></li>
 								<li><a href=" . self::GetUserStartLink() . ">Användare</a>
 									<ul>
 										<li><a href=" . self::GetUserListLink() . ">Lista användare</a></li>
@@ -150,11 +137,7 @@ class NavigationView
 		$navigation = "
 							<ul>
 								<li><a href=" . self::GetStartLink() . ">Hem</a></li>
-								<li><a href=" . self::GetRecipeStartLink() . ">Recept</a>
-									<ul>
-										<li><a href=" . self::GetRecipeListLink() . ">Lista recept</a></li>
-									</ul>
-								</li>
+								<li><a href=" . self::GetRecipeStartLink() . ">Recept</a></li>
 								<li><a class=\"active\" href=" . self::GetUserStartLink() . ">Användare</a></li>
 							</ul>
 						";

@@ -24,10 +24,11 @@ class RecipeController
 		
 		if(\View\NavigationView::GetRecipeQuery() == \View\NavigationView::START || \View\NavigationView::GetRecipeQuery() == \View\NavigationView::LISTNING)
 		{
-			$html = "";
+			$html;
 			$recipes = $recipeModel->GetRecipes();
 			if($recipes)
 			{
+				$html = $recipeView->DoRecipeMenu(isset($userInSession));
 				$html .= $recipeView->DoRecipeList($recipes);
 				if(\View\NavigationView::IsSeverityQuery())
 				{
@@ -35,7 +36,14 @@ class RecipeController
 					$html = $recipeView->DoRecipeMenu(isset($userInSession), $severity);
 					if(is_numeric($severity))
 					{
+						try
+						{
 						$html .= $recipeView->DoSelectedRecipeList($recipes, $severity);
+						}
+						catch (\Exception $e)
+						{
+							\Common\Page::AddErrormessage($e->getMessage());
+						}
 					}
 					else if($severity == \View\NavigationView::YOUR_SEVERITY)
 					{
@@ -52,7 +60,10 @@ class RecipeController
 			{
 				\Common\Page::AddErrormessage(\Common\String::FAIL_GET_RECIPES);					
 			}
-			$html .= $recipeView->DoAddRecipeButton();
+			if(isset($userInSession))
+			{
+				$html .= $recipeView->DoAddRecipeButton();
+			}
 		}
 		else if (\View\NavigationView::GetRecipeQuery() == \View\NavigationView::ADD)
 		{
@@ -62,24 +73,31 @@ class RecipeController
 				$html = $recipeView->DoAddRecipeForm();
 				if($recipeView->TriedToAddRecipe())
 				{
-					try
+					if($recipeView->ValidateRecipe())
 					{
-						$recipeInfo = array(
-							\Model\Recipe::USERID => $userInSession->GetUserID(),
-							\Model\Recipe::RECIPENAME => $recipeView->GetRecipeName(),
-							\Model\Recipe::INGREDIENT => $recipeView->GetRecipeIngredient(),
-							\Model\Recipe::DESCRIPTION => $recipeView->GetRecipeDescription(),
-							\Model\Recipe::SEVERITY => $recipeView->GetSeverity(),
-						);
-						$recipe = new \Model\Recipe($recipeInfo);
-						if($recipeModel->DoAddRecipe($recipe))
+						try
 						{
-							\Common\Page::AddSuccessmessage(\Common\String::SUCCESS_ADD_RECIPE);
+							$recipeInfo = array(
+								\Model\Recipe::USERID => $userInSession->GetUserID(),
+								\Model\Recipe::RECIPENAME => $recipeView->GetRecipeName(),
+								\Model\Recipe::INGREDIENT => $recipeView->GetRecipeIngredient(),
+								\Model\Recipe::DESCRIPTION => $recipeView->GetRecipeDescription(),
+								\Model\Recipe::SEVERITY => $recipeView->GetSeverity(),
+							);
+							$recipe = new \Model\Recipe($recipeInfo);
+							if($recipeModel->DoAddRecipe($recipe))
+							{
+								\Common\Page::AddSuccessmessage(\Common\String::SUCCESS_ADD_RECIPE);
+							}
+						}
+						catch(\Exception $e)
+						{
+							\Common\Page::AddErrormessage($e->getMessage());
 						}
 					}
-					catch(\Exception $e)
+					else
 					{
-						\Common\Page::AddErrormessage($e->getMessage());
+						\Common\Page::AddErrorMessage($recipeView->DoErrorList($recipeView->GetErrorMessages()));
 					}
 				}
 			}
@@ -91,7 +109,7 @@ class RecipeController
 		else if (\View\NavigationView::GetRecipeQuery() == \View\NavigationView::EDIT)
 		{
 			$html = "";
-			$recipeID = $recipeView->GetRecipeIDQuery();
+			$recipeID = \View\NavigationView::GetRecipeIDQuery();
 			if(isset($recipeID) && isset($userInSession))
 			{
 				$recipe = $recipeModel->GetRecipeByID($recipeID);
@@ -142,7 +160,7 @@ class RecipeController
 		else if (\View\NavigationView::GetRecipeQuery() == \View\NavigationView::DELETE)
 		{
 			$html = "";
-			$recipeID = $recipeView->GetRecipeIDQuery();
+			$recipeID = \View\NavigationView::GetRecipeIDQuery();
 			if(isset($recipeID) && isset($userInSession))
 			{
 				$recipe = $recipeModel->GetRecipeByID($recipeID);

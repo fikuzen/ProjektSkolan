@@ -70,6 +70,7 @@ class String
 		// Error messages
 		const NOT_LOGGED_IN = "Det krävs inloggning för denna sida.";
 		const NO_RECIPE_ID = "Det krävs ett receptID för att editera ett recept.";
+		const NO_RECIPES_MATCHES = "Det finns inga recept i den valda kategorin";
 		const UPDATE_RECIPE_NOT_YOURS = "Receptet du försökte editera är inte skapat av dig.";
 		const DELETE_RECIPE_NOT_YOURS = "Receptet du försökte ta bort är inte skapat av dig.";
 		const RECIPE_DOES_NOT_EXIST = "Receptet finns inte.";
@@ -92,6 +93,12 @@ class String
 		const SUCCESS_DELETE_RECIPE = "Du tog bort receptet";
 		// Validator errors
 		const USERNAME_OR_EMAIL_WITH_TAG = "Ditt användarnamn eller email innehåller ogiltiga tecken.";
+		const STARTLETTER_RECIPENAME = "Receptnamnet måste börja med en bokstav";
+		const STARTLETTER_INGREDIENT = "Ingrediensen måste börja med en bokstav";
+		const STARTLETTER_DESCRIPTION = "Beskrivningen måste börja med en bokstav";
+		const RECIPENAME_LENGTH = "Receptnamnet måste vara minst 5 tecken och max 75 tecken långt";
+		const INGREDIENT_LENGTH = "Ingrediensen måste vara minst 21 tecken och max 4000 tecken långt";
+		const DESCRIPTION_LENGTH = "Beskrviningen måste vara minst 21 tecken och max 4000 tecken långt";
 		const EMAIL_FORMAT = "Felaktigt inmatad Emailadress";
 		const USERNAME_EXISTS = "Användarnamnet finns redan";
 		const USERNAME_NOT_NULL = "Användarnamnet får inte vara null.";
