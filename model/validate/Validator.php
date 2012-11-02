@@ -72,7 +72,7 @@ class Validator
 		$recipeNameIsValid = preg_match(self::$m_startLetterRegEx, $ingredientFirstLetter);
       if(!$recipeNameIsValid)
       {
-         self::$m_errorMessages[self::$m_startLetterDescriptionError] = \Common\String::STARTLETTER_INGREDIENT;
+         self::$m_errorMessages[self::$m_startLetterIngredientError] = \Common\String::STARTLETTER_INGREDIENT;
       }
 		$recipeNameIsValid  = preg_match(self::$m_ingredientAndDescriptionRegEx, $ingredient);
 		if(!$recipeNameIsValid)
