@@ -143,7 +143,7 @@ class RecipeView
 	 *
 	 * @return $html, generated html code
 	 */
-	public function DoRecipe(\Model\Recipe $recipe, $isAuthor)
+	public function DoRecipe(\Model\Recipe $recipe, $isAuthor, $isAdmin)
 	{
 		$html = "
 			<h2>" . $recipe->GetRecipeName() . "</h2>
@@ -157,7 +157,7 @@ class RecipeView
 			</dl>
 			<p>Skapad av: " . $recipe->GetAuthor() . "</p>
 		";
-		if($isAuthor)
+		if($isAuthor || $isAdmin)
 		{
 			$html .= "<a href=\"" . NavigationView::GetRecipeUpdateLink($recipe->GetRecipeID()) . "\"><button class=\"left secondButton\">" . \Common\String::EDIT_RECIPE_TEXT . "</button></a>";
 			$html .= "<a href=\"" . NavigationView::GetRecipeDeleteLink($recipe->GetRecipeID()) . "\"><button class=\"left secondButton\">" . \Common\String::DELETE_RECIPE_TEXT . "</button></a>";

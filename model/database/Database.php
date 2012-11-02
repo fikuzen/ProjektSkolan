@@ -25,40 +25,6 @@ class Database
 		return true;
 	}
 
-	//TODO: ANVÄNDS DENNA???? Se över retur värdet.
-	/**
-	 * Select one column in a database table
-	 * 
-	 * @param $stmt, mysqli stmt
-	 * @return $return, the value of the field,
-	 */
-	public function SelectOne(\mysqli_stmt $stmt)
-	{
-		$return = 0;
-		
-		if(!$stmt)
-		{
-			throw new \Exception($this->mysqli->error);
-		}
-
-		if(!$stmt->execute())
-		{
-			throw new \Exception($this->mysqli->error);
-		}
-
-		if(!$stmt->bind_result($return))
-		{
-			throw new \Exception($this->mysqli->error);
-		}
-
-		$stmt->fetch();
-
-		$stmt->close();
-
-		return $return;
-
-	}
-
 	/**
 	 * Selecs all columns in one row.
 	 * 
@@ -207,6 +173,27 @@ class Database
 		return $return;
 	}
 
+	/**
+	 * Install the application
+	 */
+	public function InstallApplication()
+	{
+		$dumpURL = "/install/foodtime.sql";
+		echo 'Lyckat... ' . $mysqli->host_info . "<br />";
+		echo 'Hämta dumpfilen' . "<br />";
+		 
+		$sql = file_get_contents($dumpURL);
+		if (!$sql){
+			die ('Fel vid öppning av fil');
+		}
+		 
+		echo 'exekverar filen<br />';
+		mysqli_multi_query($mysqli,$sql);
+		 
+		echo 'Klart.';
+		$this->Close();
+	}
+	
 	/**
 	 * Closes the database connection
 	 */

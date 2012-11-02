@@ -597,6 +597,14 @@ a.userLink {
 	float: left;
 }
 
+/**
+ * 	Install
+ */
+
+h1.testRubrik {
+	margin: 1em 0;
+}
+
 
 /*
   960 Grid System ~ Core CSS.

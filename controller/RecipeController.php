@@ -120,26 +120,32 @@ class RecipeController
 					$html = $recipeView->DoEditRecipeForm($recipe);
 					if($recipeView->TriedToEditRecipe())
 					{
-						try
+						if($recipeView->ValidateRecipe())
 						{
-							$recipeInSession = \Model\Recipe::GetRecipeSession();
-							$recipeInfo = array(
-								\Model\Recipe::RECIPEID => $recipeInSession->GetRecipeID(),
-								\Model\Recipe::RECIPENAME => $recipeView->GetRecipeName(),
-								\Model\Recipe::INGREDIENT => $recipeView->GetRecipeIngredient(),
-								\Model\Recipe::DESCRIPTION => $recipeView->GetRecipeDescription(),
-								\Model\Recipe::SEVERITY => $recipeView->GetSeverity(),
-							);
-							$recipe = new \Model\Recipe($recipeInfo);
+							try
+							{
+								$recipeInSession = \Model\Recipe::GetRecipeSession();
+								$recipeInfo = array(
+									\Model\Recipe::RECIPEID => $recipeInSession->GetRecipeID(),
+									\Model\Recipe::RECIPENAME => $recipeView->GetRecipeName(),
+									\Model\Recipe::INGREDIENT => $recipeView->GetRecipeIngredient(),
+									\Model\Recipe::DESCRIPTION => $recipeView->GetRecipeDescription(),
+									\Model\Recipe::SEVERITY => $recipeView->GetSeverity(),
+								);
+								$recipe = new \Model\Recipe($recipeInfo);
 								if($recipeModel->DoUpdateRecipe($recipe))
 								{
 									\Common\Page::AddSuccessmessage(\Common\String::SUCCESS_EDIT_RECIPE);
 								}
-							
+							}
+							catch(\Exception $e)
+							{
+								\Common\Page::AddErrormessage($e->getMessage());
+							}
 						}
-						catch(\Exception $e)
+						else 
 						{
-							\Common\Page::AddErrormessage($e->getMessage());
+							\Common\Page::AddErrorMessage($recipeView->DoErrorList($recipeView->GetErrorMessages()));
 						}
 					}
 				}
@@ -211,6 +217,7 @@ class RecipeController
 				if(isset($userInSession))
 				{
 					// store a boolean to see if the user is the author
+					$isAdmin = ($userInSession->GetIsAdmin() == 1) ? true : false;
 					$isAuthor = $recipeModel->IsAuthor($userInSession, $recipe->GetUserID());
 				}
 				else {
@@ -223,7 +230,7 @@ class RecipeController
 				$recipe->SetAuthor($user->GetUsername());
 				
 				// make the recipe
-				$html = $recipeView->DoRecipe($recipe, $isAuthor);	
+				$html = $recipeView->DoRecipe($recipe, $isAuthor, $isAdmin);	
 			}
 			else
 			{
