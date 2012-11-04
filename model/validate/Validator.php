@@ -9,9 +9,9 @@ class Validator
 
    private static $m_passwordRegExp = "/^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/";
 	
-	private static $m_startLetterRegEx = "/^[a-zA-Z]{1}$/";
-	private static $m_recipeNameRegEx = "/^[a-zA-Z]{2}[a-zA-Z\s]{3,73}$/";
-	private static $m_ingredientAndDescriptionRegEx = "/^[a-zA-Z]{2}[a-zA-Z\s]{18,3998}$/";
+	private static $m_startLetterRegEx = "/^[a-zåäöA-ZÅÄÖ]{1}$/";
+	private static $m_recipeNameRegEx = "/^[a-zåäöA-ZÅÄÖ]{2}[a-zåäöA-ZÅÄÖ\s]{3,73}$/";
+	private static $m_ingredientAndDescriptionRegEx = "/^[0-9a-zåäöA-ZÅÄÖ,:.;]{2}[0-9a-zåäöA-ZÅÄÖ,:.;\s]{18,3998}$/";
 
    /* Errormessages */
    private static $m_errorMessages;
@@ -234,6 +234,118 @@ class Validator
 
       $sut = new Validator();
 
+		/**
+		 * Recipe name with numbers
+		 */
+		if($sut->ValidateRecipeName("1232132"))
+      {
+         $errorMessages[] = "RecipeName '1232132' does work (on line: " . __LINE__ . ")";
+      }
+		
+		/**
+		 * Recipe which start with a whitespace
+		 */
+		if($sut->ValidateRecipeName(" Fiskbullar med senapsmak"))
+      {
+         $errorMessages[] = "RecipeName ' Fiskbullar med senapsmak' does work (on line: " . __LINE__ . ")";
+      }
+		
+		/**
+		 * Recipe to short
+		 */
+		if($sut->ValidateRecipeName("Fisk"))
+      {
+         $errorMessages[] = "RecipeName 'Fisk' does work (on line: " . __LINE__ . ")";
+      }
+		
+		/**
+		 * Recipe more than 75chars
+		 */
+		if($sut->ValidateRecipeName("Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak"))
+      {
+         $errorMessages[] = "RecipeName 'Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak Fiskbullar med senapsmak' does work (on line: " . __LINE__ . ")";
+      }
+		
+		/**
+		 * Valid recipename
+		 */
+		if(!$sut->ValidateRecipeName("Fiskbullar med senapsmak"))
+      {
+         $errorMessages[] = "RecipeName 'Fiskbullar med senapsmak' doesn't work (on line: " . __LINE__ . ")";
+		}
+		
+		/**
+		 * Ingredient start with whitespace.
+		 */
+		if($sut->ValidateIngredient(" 1Burk Arla fiskbullar med senapsmak"))
+      {
+         $errorMessages[] = "Ingredient ' 1Burk Arla fiskbullar med senapsmak' does work (on line: " . __LINE__ . ")";
+		}
+		
+		/**
+		 * Ingredient to short
+		 */
+		if($sut->ValidateIngredient("1Burk Arla"))
+      {
+         $errorMessages[] = "Ingredient '1Burk Arla' does work (on line: " . __LINE__ . ")";
+		}
+		
+		/**
+		 * Ingredient with just numbers
+		 */
+		if($sut->ValidateIngredient("3213123123122"))
+      {
+         $errorMessages[] = "Ingredient '3213123123122' doesn't work (on line: " . __LINE__ . ")";
+		}
+		
+		/**
+		 * Valid ingredient
+		 */
+		if(!$sut->ValidateIngredient("1burk Arla fiskbullar med senapsmak"))
+      {
+         $errorMessages[] = "Ingredient '1Burk Arla fiskbullar med senapsmak' does work (on line: " . __LINE__ . ")";
+		}
+		
+		/**
+		 * Valid description
+		 */
+		if(!$sut->ValidateDescription("Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter."))
+      {
+         $errorMessages[] = "Description 'Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.' does work (on line: " . __LINE__ . ")";
+		}
+		
+		/**
+		 * Description start with white space
+		 */
+		if($sut->ValidateDescription(" Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter."))
+      {
+         $errorMessages[] = "Description ' Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.' does work (on line: " . __LINE__ . ")";
+		}
+		
+		/**
+		 * Description with just numbers
+		 */
+		if($sut->ValidateDescription("32131321321321 1"))
+      {
+         $errorMessages[] = "Description '32131321321321 1' does work (on line: " . __LINE__ . ")";
+		}
+		
+		/**
+		 * To short description
+		 */
+		if($sut->ValidateDescription("Gör såhär: 1."))
+      {
+         $errorMessages[] = "Description 'Gör såhär: 1.' does work (on line: " . __LINE__ . ")";
+		}
+		
+		/**
+		 * To long description 
+		 */
+		if($sut->ValidateDescription("Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.g allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter.Gör såhär: 1. Lägallting i e: 1. Lägallting i ellting i e"))
+      {
+         $errorMessages[] = "Description 'Gör såhär: 1. Lägg allting i en kastrull låt koka ca 15minuter...............' doesn't work (on line: " . __LINE__ . ")";
+		}
+		
       /**
        * Test with a valid email address.
        */

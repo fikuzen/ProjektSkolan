@@ -65,7 +65,7 @@ class Recipe
 		return $this->m_recipe[self::INGREDIENT];
 	}
 
-	public function Getrecipedescription()
+	public function GetRecipeDescription()
 	{
 		return $this->m_recipe[self::DESCRIPTION];
 	}
@@ -112,6 +112,16 @@ class Recipe
 	}
 	
 	/**
+	 * Set the Recipe Session
+	 * 
+	 * @param $recipe, RECIPE
+	 */
+	public static function SetRecipeSession(Recipe $recipe)
+	{
+		$_SESSION[\Common\String::SESSION_RECIPE] = serialize($recipe);
+	}
+	
+	/**
 	 * Get the the recipe stored in the session
 	 *
 	 * @return $recipe, the user.
@@ -119,5 +129,108 @@ class Recipe
 	public static function GetRecipeSession()
 	{
 		return isset($_SESSION[\Common\String::SESSION_RECIPE]) ? unserialize($_SESSION[\Common\String::SESSION_RECIPE]) : NULL;
+	}
+	
+	public static function test()
+	{
+		// Errormessages is saved in this array
+		$errorMessages = array();
+		$errorMessages[] = "Recipe Object Test";
+		
+		$recipeID = 1; 
+		$userID = 1;
+		$recipeName = "Fiskbullar";
+		$recipeIngredient = "1burk arlafiskbullar";
+		$recipeDescription = "Lägg allting i en kastrull och låt koka 15minuter";
+		$recipeSeverity = 4;
+		$recipeInfo = array(
+					self::RECIPEID => $recipeID, 
+					self::USERID => $userID, 
+					self::RECIPENAME => $recipeName, 
+					self::INGREDIENT => $recipeIngredient, 
+					self::DESCRIPTION => $recipeDescription,
+					self::SEVERITY => $recipeSeverity 
+					);
+		$recipe = new Recipe($recipeInfo);
+		
+		unset($_SESSION[\Common\String::SESSION_RECIPE]);
+		if($recipe->GetRecipeSession() != NULL)
+		{
+			$errorMessages[] = "Something is wrong with the GetRecipeSession function";
+		}
+		
+		$recipe->SetRecipeSession($recipe);
+		if($recipe->GetRecipeSession() == NULL)
+		{
+			$errorMessages[] = "Something is wrong with the SetRecipeSession function";
+		}
+		
+		if($recipe->GetRecipeID() != $recipeID)
+		{
+			$errorMessages[] = "Something is wrong with the GetRecipeID function";
+		}
+		
+		$recipe->SetRecipeID(2);
+		if($recipe->GetRecipeID() == $recipeID)
+		{
+			$errorMessages[] = "Something is wrong with the SetRecipeID function";
+		}
+		
+		if($recipe->GetUserID() != $userID)
+		{
+			$errorMessages[] = "Something is wrong with the GetUserID function";
+		}
+		
+		$recipe->SetUserID(2);
+		if($recipe->GetUserID() == $userID)
+		{
+			$errorMessages[] = "Something is wrong with the SetUserID function";
+		}
+		
+		if($recipe->GetRecipeName() != $recipeName)
+		{
+			$errorMessages[] = "Something is wrong with the GetRecipeName function";
+		}
+		
+		$recipe->SetRecipeName("Kaka med maka");
+		if($recipe->GetRecipeName() == $recipeName)
+		{
+			$errorMessages[] = "Something is wrong with the SetRecipeName function";
+		}
+		
+		if($recipe->GetRecipeIngredient() != $recipeIngredient)
+		{
+			$errorMessages[] = "Something is wrong with the GetRecipeIngredient function";
+		}
+		
+		$recipe->SetRecipeIngredient("1burk arlafiskbulle");
+		if($recipe->GetRecipeIngredient() == $recipeIngredient)
+		{
+			$errorMessages[] = "Something is wrong with the SetRecipeIngredient function";
+		}
+		
+		if($recipe->GetRecipeDescription() != $recipeDescription)
+		{
+			$errorMessages[] = "Something is wrong with the GetRecipeDescription function";
+		}
+		
+		$recipe->SetRecipeDescription("Gör inte som det står lol.");
+		if($recipe->GetRecipeDescription() == $recipeDescription)
+		{
+			$errorMessages[] = "Something is wrong with the SetRecipeDescription function";
+		}
+		
+		if($recipe->GetSeverity() != $recipeSeverity)
+		{
+			$errorMessages[] = "Something is wrong with the GetSeverity function";
+		}
+		
+		$recipe->SetSeverity(1);
+		if($recipe->GetSeverity() == $recipeSeverity)
+		{
+			$errorMessages[] = "Something is wrong with the SetSeverity function";
+		}
+		
+		return $errorMessages;
 	}
 }

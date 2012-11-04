@@ -58,14 +58,9 @@ class UserModel
 		$deleteStatus = true;
 		
 		if(UserDAL::DeleteUser($userID))
-		{
-			// set the session to the $user with new values.
-			$_SESSION[\Common\String::SESSION_LOGGEDIN] = NULL;
-		}
+			\Model\User::DeleteUserSession();
 		else
-		{
 			$deleteStatus = false;
-		}
 
 		return $deleteStatus;
 	}
@@ -80,13 +75,9 @@ class UserModel
 	{
 		$user = UserDAL::GetUserByID($userID);
 		if($user)
-		{
 			return $user;
-		}
 		else
-		{
 			return false;
-		}
 	}
 	
 	/**
@@ -99,23 +90,59 @@ class UserModel
 	{
 		$users = UserDAL::GetAllUsers();
 		if($users)
-		{
 			return $users;
-		}
 		else
-		{
 			return false;
-		}
 	}
 	
 	public static function test(Database $db)
 	{
 		// Errormessages is saved in this array
 		$errorMessages = array();
-		$errorMessages[] = "User Test";
-
+		$errorMessages[] = "UserModel Test";
+		
 		$sut = new UserModel($db);
-		$userDAL = new UserDAL($db);
+		
+		/**
+		 * Get all users
+		 */
+		$users = $sut->GetUsers();
+		if(count($users) != 3)
+			$errorMessages[] = "Something is wrong with the GetUsers() function";
+		
+		/**
+		 * Get a user with ID
+		 */
+		$userOne = $sut->GetUserByID(1);
+		if($userOne->GetUserID() != 1)
+			$errorMessages[] = "Something is wrong with the GetUserByID() function";
+		
+		/**
+		 * Delete a user
+		 */
+		$userToRemove = $sut->GetUserByID(1);
+		$userToRemove->SetUsername("NewTestUser");
+		$userToRemove->SetUserID(-1);
+		$userIDToRemove = \Model\UserDAL::AddUser($userToRemove);
+		if(!$sut->DoDeleteUser($userIDToRemove))
+			$errorMessages[] = "Something is wrong with the DoDeleteUser() function";
+		
+		
+		/**
+		 * Update a user
+		 */
+		$userBeforeUpdate = $sut->GetUserByID(1);
+		$userToUpdateOldEmail = $userBeforeUpdate->GetEmail();
+		$userBeforeUpdate->SetEmail("mongoj_92@hotmail.com");
+		$sut->DoUpdateUser($userBeforeUpdate, $userBeforeUpdate);
+		$userAfterUpdate = $sut->GetUserByID(1);
+		
+		if($userToUpdateOldEmail == $userAfterUpdate->GetEmail())
+			$errorMessages[] = "Something is wrong with the DoUpdateUser() function";
+		
+		$userToChangeBackTo = $sut->GetUserByID(1);
+		$userToChangeBackTo->SetEmail($userToUpdateOldEmail);
+		$sut->DoUpdateUser($userToChangeBackTo, $userToChangeBackTo);
 		
 		return $errorMessages;
 	}

@@ -214,12 +214,15 @@ class RecipeView
 				<textarea id=\"" . \Common\String::RECIPE_DESCRIPTION . "\" name=\"" . \Common\String::RECIPE_DESCRIPTION . "\">" . $recipe->GetRecipeDescription() . "</textarea>
 				<label for=\"" . \Common\String::RECIPE_SEVERITY . "\">" . \Common\String::RECIPE_SEVERITY_TEXT . "</label>
 				<select name=\"" . \Common\String::RECIPE_SEVERITY . "\" id=\"" . \Common\String::RECIPE_SEVERITY . "\">";
+		// Write option to each severitylevel.
 		for($i = \Common\String::SEVERITY_MIN; $i <= \Common\String::SEVERITY_MAX; $i++)
 		{
+			// If the severity is the selected to the recipe make it start as selected.
 			if($i == $selectedSeverity)
 			{
 				$html .= "<option selected=\"selected\" value=\"$i\">" . \Common\String::$recipeSeverityText[$i] . "</option>";
 			}
+			// else not selected from start.
 			else
 			{
 				$html .= "<option value=\"$i\">" . \Common\String::$recipeSeverityText[$i] . "</option>";
@@ -243,17 +246,26 @@ class RecipeView
 		return $html;
 	}
 
+	/**
+	 * Do the recipe menu
+	 * 
+	 * @param $isLoggedIn.. if the user is logged in show the Match your Level.
+	 * @param $chosedSeverity... if the user choosed a severity make that severity button selected.
+	 */
 	public function DoRecipeMenu($isLoggedIn, $chosedSeverity = -1)
 	{
 		$html = "
 			<ul class=\"left severity\">";
+		// if the user is logged in show the Match your Level.
 		if($isLoggedIn)
 		{
 			$html .= "<li><a href=\"" . NavigationView::GetRecipeSeverityLink(\View\NavigationView::YOUR_SEVERITY) . "\"><button class=\"recipeMatchYourLevel\">Matcha din nivå</button></a></li>";
 		}
 		
+		// Make buttons for each severity level.
 		for($severity = \Common\String::SEVERITY_MIN; $severity <= \Common\String::SEVERITY_MAX; $severity++)
 		{
+			// if the severity == the chosen one make that button visually selected.
 			if($severity == $chosedSeverity)
 				$html .= "<li><a href=\"" . NavigationView::GetRecipeSeverityLink($severity) . "\"><button class=\"recipeSeverityButton chosedSeverity\">" . \Common\String::$severityButtonText[$severity] . "</button></a></li>";
 			else 
@@ -273,6 +285,7 @@ class RecipeView
 	{
 		$html = "
 			<ul class=\"recipeList\">";
+		// do links to all recipes. 
 		foreach($recipes as $recipe)
 		{
 			$html .= "<li><a href=\"" . NavigationView::GetRecipeLink($recipe->GetRecipeID()) . "\"><span class=\"severity" . $recipe->GetSeverity() . "\">" . $recipe->GetRecipeName() . "</span></a></li>";
@@ -289,7 +302,7 @@ class RecipeView
 	 */
 	public function DoSelectedRecipeList($recipes, $severity)
 	{
-		$recipeToShow;
+		$recipeToShow = null;
 		$html = "<ul class=\"recipeList\">";
 		foreach($recipes as $recipe)
 		{
@@ -315,7 +328,7 @@ class RecipeView
 			}
 		}
 		else {
-			throw new \Exception(\Common\Page::AddErrormessage(\Common\String::NO_RECIPES_MATCHES));
+			throw new \Exception(\Common\String::NO_RECIPES_MATCHES);
 		}
 		$html .= "</ul>";
 		return $html;

@@ -2,7 +2,11 @@
 
 namespace Model;
 
-require_once ('model/DAL/UserDAL.php');
+require_once('model/DAL/UserDAL.php');
+require_once('model/database/Database.php');
+require_once('model/object/User.php');
+require_once('model/crypt/Krypter.php');
+require_once('common/String.php');
 
 class AuthModel
 {
@@ -17,13 +21,9 @@ class AuthModel
 	{
 		$user = UserDAL::GetUserByUsername($username);
 		if($user->GetUsername() == null)
-		{
 			return false;
-		}
-		else
-		{
-			throw new \Exception(\Common\String::USERNAME_EXISTS);
-		}
+		
+		return true;
 	}
 
 	/**
@@ -36,10 +36,9 @@ class AuthModel
 	{
 		$registerStatus = true;
 		$user->SetPassword(Krypter::Crypt($user->GetPassword()));
+		
 		if(!UserDAL::AddUser($user))
-		{
-			$registerStatus = false;			
-		}
+			$registerStatus = false;
 
 		return $registerStatus;
 	}
@@ -69,18 +68,12 @@ class AuthModel
 		{
 			if($user->GetPassword() == $tryPassword)
 			{
-				$_SESSION[\Common\String::SESSION_LOGGEDIN] = serialize($user);
+				\Model\User::SetUserSession($user);
 				$acceptedUser = true;
 			}
 		}
 		if(isset($acceptedUser))
-		{
-			if(!$acceptedUser)
-			{
-				throw new \Exception(\Common\String::WRONG_PASSWORD_OR_USERNAME);
-			}
 			return $acceptedUser;
-		}
 	}
 
 	/**
@@ -89,79 +82,60 @@ class AuthModel
 	public function DoLogOut()
 	{
 		if(isset($_SESSION[\Common\String::SESSION_LOGGEDIN]))
-		{
-			unset($_SESSION[\Common\String::SESSION_LOGGEDIN]);
-		}
+			\Model\User::DeleteUserSession();
+	}
+	
+	/**
+	 * Get a user from the database
+	 * 
+	 * @param $username, username
+	 * @return $user or false if the user doesn't exists
+	 */
+	public function GetUserByName($username)
+	{
+		$user = UserDAL::GetUserByUsername($username);
+		if($user)
+			return $user;
+		else
+			return false;
 	}
 
 	public static function test(Database $db)
 	{
 		// Errormessages is saved in this array
 		$errorMessages = array();
-		$errorMessages[] = "Authentication Test";
+		$errorMessages[] = "AuthModel Test";
 
 		$sut = new AuthModel($db);
 		$userDAL = new UserDAL($db);
 
 		if($sut->IsLoggedIn())
-		{
 			$errorMessages[] = 'Something is wrong with the IsLoggedIn() function "When you shouldn\'t be logged in" (on line: ' . __LINE__ . ")";
-		}
 
 		// DoLogin fail user
-		try
-		{
-			$sut->DoLogin("Fiskpinne", "Fläskpannkaka");
-			// Test failed.
+		if($sut->DoLogin("Fiskpinne", "Fläskpannkaka"))
 			$errorMessages[] = 'Something is wrong with the DoLogin("Fiskpinne", "Fläskpannkaka") function (on line: ' . __LINE__ . ")";
-		}
-		catch (\Exception $e)
-		{
-			// Test success
-		}
 
 		// DoLogin success user
-		if(!($sut->DoLogin("Fisk", Krypter::Crypt("Fisk22"))))
-		{
+		if(!$sut->DoLogin("Fisk", Krypter::Crypt("Fisk22")))
 			$errorMessages[] = 'Something is wrong with the DoLogin("Fisk", "Fisk22") function (on line: ' . __LINE__ . ")";
-		}
 
 		// Should be logged in.
 		if(!$sut->IsLoggedIn())
-		{
 			$errorMessages[] = 'Something is wrong with the IsLoggedIn() function "When you should be logged in (on line: ' . __LINE__ . ")";
-		}
 
 		// Logging out the inlogged test user.
 		$sut->DoLogout();
 		if($sut->isLoggedIn())
-		{
 			$errorMessages[] = 'Something is wrong with the DoLogout() function (on line: ' . __LINE__ . ")";
-		}
 
 		// DoLogin right username, fail password
-		try
-		{
-			$sut->DoLogin("Fisk", "Fisken22");
-			// Test failed.
+		if($sut->DoLogin("Fisk", "Fisken22"))
 			$errorMessages[] = 'Something is wrong with the DoLogin("Fisk", "Fisken22") function (on line: ' . __LINE__ . ")";
-		}
-		catch (\Exception $e)
-		{
-			// Test success.
-		}
 
 		// DoLogin fail username, right password
-		try
-		{
-			$sut->DoLogin("Fisken", "Fisk22");
-			// Test failed.
+		if($sut->DoLogin("Fisken", "Fisk22"))
 			$errorMessages[] = 'Something is wrong with the DoLogin("Fisken", "Fisk22") function (on line: ' . __LINE__ . ")";
-		}
-		catch (\Exception $e)
-		{
-			// Test success.
-		}
 
 		return $errorMessages;
 	}

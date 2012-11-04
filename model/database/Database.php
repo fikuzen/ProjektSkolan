@@ -14,7 +14,7 @@ class Database
 	public function Connect(DBSettings $dbsettings)
 	{
 
-		$this->mysqli = new \mysqli($dbsettings->getHost(), $dbsettings->getUser(), $dbsettings->getPass(), $dbsettings->getDB());
+		$this->mysqli = new \mysqli($dbsettings->GetHost(), $dbsettings->GetUser(), $dbsettings->GetPass(), $dbsettings->GetDB());
 		if($this->mysqli->connect_error)
 		{
 			throw new \Exception($this->mysqli->connect_error);
@@ -23,6 +23,31 @@ class Database
 		// Sets the database encoding
 		$this->mysqli->set_charset("utf8");
 		return true;
+	}
+	
+	/**
+	 * Select one col in one row
+	 * 
+	 * @param $stmt, mysqli_stmt
+	 * @return the databasevalue of the field
+	 */
+	public function SelectOne(\mysqli_stmt $stmt)
+	{		
+		if (!$stmt)
+			throw new Exception($this->mysqli->error);
+		
+		if (!$stmt->execute())
+		{
+			throw new Exception($this->mysqli->error);
+		}
+		
+		$return = 0;
+		
+		$stmt->bind_result($return);
+		$stmt->fetch();
+		$stmt->close();
+		
+		return $return;
 	}
 
 	/**
@@ -125,7 +150,6 @@ class Database
 		{
 			throw new Exception($this->mysqli->error);
 		}
-						
 		$stmt->close();
 		
 		return true;
@@ -174,27 +198,6 @@ class Database
 	}
 
 	/**
-	 * Install the application
-	 */
-	public function InstallApplication()
-	{
-		$dumpURL = "/install/foodtime.sql";
-		echo 'Lyckat... ' . $mysqli->host_info . "<br />";
-		echo 'Hämta dumpfilen' . "<br />";
-		 
-		$sql = file_get_contents($dumpURL);
-		if (!$sql){
-			die ('Fel vid öppning av fil');
-		}
-		 
-		echo 'exekverar filen<br />';
-		mysqli_multi_query($mysqli,$sql);
-		 
-		echo 'Klart.';
-		$this->Close();
-	}
-	
-	/**
 	 * Closes the database connection
 	 */
 	public function Close()
@@ -218,18 +221,6 @@ class Database
 			$errorMessages[] = "Database conenction failed. (on line: " . __LINE__ . ")";
 		}
 
-		/**
-		 * Count users
-		 */
-		$stmt = $sut->Prepare("SELECT COUNT(*) FROM user");
-		try
-		{
-			$usersBeforeFailedInsert = $sut->SelectOne($stmt);
-		}
-		catch (\Exception $e)
-		{
-			$errorMessages[] = "Database get user count failed. (on line: " . __LINE__ . ")";
-		}
 
 		/**
 		 * Insert user with a static username, should already exist.

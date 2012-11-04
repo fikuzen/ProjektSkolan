@@ -220,7 +220,7 @@ class UserDAL
 		 */
 		if(!$sut->UpdateUserProfile($user))
 		{
-			$errorMessages[] = "GetUserByID failed (on line: " . __LINE__ . ")";
+			$errorMessages[] = "UpdateUserProfile failed (on line: " . __LINE__ . ")";
 		}
 
 		/**

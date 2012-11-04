@@ -78,9 +78,9 @@ class NavigationView
 	{
 		$navigation = "
 							<ul>
-								<li><a class=\"active\" href=" . self::GetStartLink() . ">Hem</a></li>
-								<li><a href=" . self::GetRecipeStartLink() . ">Recept</a></li>
-								<li><a href=" . self::GetUserStartLink() . ">Användare</a></li>
+								<li><a class=\"active\" href=" . self::GetStartLink() . ">" . \Common\String::HOME_LINK_TEXT . "</a></li>
+								<li><a href=" . self::GetRecipeStartLink() . ">" . \Common\String::RECIPE_LINK_TEXT . "</a></li>
+								<li><a href=" . self::GetUserStartLink() . ">" . \Common\String::USER_LINK_TEXT . "</a></li>
 							</ul>
 						";
 		
@@ -96,9 +96,9 @@ class NavigationView
 	{
 		$navigation = "
 							<ul>
-								<li><a href=" . self::GetStartLink() . ">Hem</a></li>
-								<li><a class=\"active\"  href=" . self::GetRecipeStartLink() . ">Recept</a></li>
-								<li><a href=" . self::GetUserStartLink() . ">Användare</a></li>
+								<li><a href=" . self::GetStartLink() . ">" . \Common\String::HOME_LINK_TEXT . "</a></li>
+								<li><a class=\"active\"  href=" . self::GetRecipeStartLink() . ">" . \Common\String::RECIPE_LINK_TEXT . "</a></li>
+								<li><a href=" . self::GetUserStartLink() . ">" . \Common\String::USER_LINK_TEXT . "</a></li>
 							</ul>
 						";
 		return $navigation;
@@ -113,15 +113,10 @@ class NavigationView
 	{
 		$navigation = "
 							<ul>
-								<li><a href=" . self::GetStartLink() . ">Hem</a></li>
-								<li><a href=" . self::GetRecipeStartLink() . ">Recept</a></li>
-								<li><a href=" . self::GetUserStartLink() . ">Användare</a>
-									<ul>
-										<li><a href=" . self::GetUserListLink() . ">Lista användare</a></li>
-										<li><a href=" . self::GetUserAddLink() . ">Lägg till användare</a></li>
-									</ul>
-								</li>
-								<li><a class=\"active\" href=" . self::GetAdminStartLink() . ">Admin</a></li>
+								<li><a href=" . self::GetStartLink() . ">" . \Common\String::HOME_LINK_TEXT . "</a></li>
+								<li><a href=" . self::GetRecipeStartLink() . ">" . \Common\String::RECIPE_LINK_TEXT . "</a></li>
+								<li><a href=" . self::GetUserStartLink() . ">" . \Common\String::USER_LINK_TEXT . "</a></li>
+								<li><a class=\"active\" href=" . self::GetAdminStartLink() . ">" . \Common\String::ADMIN_LINK_TEXT . "</a></li>
 							</ul>
 						";
 		return $navigation;
@@ -136,9 +131,9 @@ class NavigationView
 	{
 		$navigation = "
 							<ul>
-								<li><a href=" . self::GetStartLink() . ">Hem</a></li>
-								<li><a href=" . self::GetRecipeStartLink() . ">Recept</a></li>
-								<li><a class=\"active\" href=" . self::GetUserStartLink() . ">Användare</a></li>
+								<li><a href=" . self::GetStartLink() . ">" . \Common\String::HOME_LINK_TEXT . "</a></li>
+								<li><a href=" . self::GetRecipeStartLink() . ">" . \Common\String::RECIPE_LINK_TEXT . "</a></li>
+								<li><a class=\"active\" href=" . self::GetUserStartLink() . ">" . \Common\String::USER_LINK_TEXT . "</a></li>
 							</ul>
 						";
 		return $navigation;
@@ -153,7 +148,7 @@ class NavigationView
    {
       $navigation = "
                      <ul>
-                        <li><a href=" . self::GetStartLink() . ">Hem</a></li>
+                        <li><a href=" . self::GetStartLink() . ">" . \Common\String::HOME_LINK_TEXT . "</a></li>
                      </ul>
                   ";
       return $navigation;

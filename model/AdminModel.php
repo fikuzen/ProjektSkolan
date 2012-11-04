@@ -20,7 +20,7 @@ class AdminModel
 	{
 		// Errormessages is saved in this array
 		$errorMessages = array();
-		$errorMessages[] = "Administration Test";
+		$errorMessages[] = "AdminModel Test";
 
 		$sut = new AdminModel($db);
 		$userDAL = new UserDAL($db);

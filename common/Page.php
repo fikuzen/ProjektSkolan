@@ -8,7 +8,6 @@ namespace Common;
 */
 class Page
 {
-	/* Member variables */
 	private $m_stylesheets = array();
 	private $m_scripts = array();
 	private $m_charset = "";
@@ -18,7 +17,7 @@ class Page
 	public static $m_successMessages = array();
 	
 	/**
-	 * @param $language, string language
+	 * @param $language, string language, de
 	 * @param $charset, string encoding
 	 */ 
 	public function __construct($language = "sv", $charset = "utf-8")
@@ -26,11 +25,14 @@ class Page
 		$this->m_language = $language;
 		$this->m_charset = $charset;
 	}
+	
 	public static function AddSuccessMessage($message) { self::$m_successMessages[] = $message; }
 	public static function AddErrorMessage($message) { self::$m_errorMessages[] = $message; }
 	public function SetTitle($title) { $this->m_title = $title; }
 	
 	/**
+	 * Adds a stylesheet tag to an array with stylesheets
+	 * 
 	 * @param $stylesheet, URL to stylesheet
 	 */
 	public function AddStylesheet($stylesheet)
@@ -39,6 +41,8 @@ class Page
 	}
 	
 	/**
+	 * Adds javascript tag to an array with scripts 
+	 *
 	 * @param $javascript, URL to script
 	 */
 	public function AddJavascript($javascript)
@@ -46,7 +50,10 @@ class Page
 		$this->m_scripts[] = "<script src='$javascript'></script>";
 	}
 	
-	/* Generates the content of the head */
+	/**
+	 * Generates the HTML HEAD
+	 * @return $head, html generated headtag with stylesheets.
+	 */
 	public function GenerateHead()
 	{
 		$head = "<head>";
@@ -65,7 +72,7 @@ class Page
 	 * Generate the title of the page in a h1 tagg.
 	 * 
 	 * @param $bodyHeader, the title
-	 * @return string, htmlcode
+	 * @return $body, htmlcode
 	 */
 	private function GenerateHeader($bodyHeader)
 	{
@@ -84,7 +91,7 @@ class Page
 	 * Generate the Auth section of the page, can be a login form or if logged in the user information
 	 * 
 	 * @param $bodyAuth, the auth context
-	 * @return string, htmlcode
+	 * @return $body, htmlcode
 	 */
 	private function GenerateAuth($bodyAuth)
 	{
@@ -101,7 +108,7 @@ class Page
 	 * Generate the main navigation bar, should be an ul list
 	 * 
 	 * @param $bodyNavigation, the main navigation context
-	 * @return string, htmlcode
+	 * @return $body, htmlcode
 	 */
 	private function GenerateNavigation($bodyNavigation)
 	{
@@ -118,7 +125,7 @@ class Page
 	 * 
 	 * @param $bodyContentLeft, the main contents context
     * @param $fullWidth, if it should be fullWidth or not
-	 * @return string, htmlcode
+	 * @return $body, htmlcode
 	 */
 	private function GenerateBodyLeft($bodyContentLeft, $fullWidth)
 	{
@@ -146,7 +153,7 @@ class Page
 	 * Generate the context for the right column
 	 * 
 	 * @param $bodyContentRight, the main contents sidebar
-	 * @return string, htmlcode
+	 * @return $body, htmlcode
 	 */
 	private function GenerateBodyRight($bodyContentRight)
 	{
@@ -163,7 +170,7 @@ class Page
 	 * Generate the footer
 	 * 
 	 * @param $bodyFooter, should be a p with the footer contect
-	 * @return string, htmlcode
+	 * @return $body, htmlcode
 	 */
 	private function GenerateBodyFooter($bodyFooter)
 	{
@@ -184,6 +191,11 @@ class Page
 		return $body;
 	}
 	
+	/**
+	 * Show the user possible error messages
+	 * 
+	 * @return $body, html generated code.
+	 */
 	private function GenerateErrorMessages()
 	{
 		$body = "<div class=\"validationError\">";
@@ -194,6 +206,11 @@ class Page
 		return $body;
 	}
 	
+	/**
+	 * Show the user possible success messages
+	 * 
+	 * @return $body, html generated code.
+	 */
 	private function GenerateSuccessMessages()
 	{
 		$body = "<div class=\"successMessage\">";

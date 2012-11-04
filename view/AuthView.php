@@ -2,6 +2,11 @@
 
 namespace View;
 
+require_once('model/validate/Validator.php');
+require_once('model/crypt/Krypter.php');
+require_once('common/String.php');
+require_once('common/Page.php');
+
 class AuthView
 {
 	private $m_username;
@@ -14,6 +19,9 @@ class AuthView
 		$this->m_validator = new \Model\Validator();
 	}
 
+	/**
+	 * Set the errormessages from validator errormessages to this class errormessages array
+	 */
 	public function SetErrorMessages()
 	{
 		foreach($this->m_validator->GetErrorMessages() as $errorMessage)
@@ -22,11 +30,19 @@ class AuthView
 		}
 	}
 
+	/**
+	 * Add error message to the private errormessages array.
+	 */
 	public function AddErrorMessage($error)
 	{
 		$this->m_errorMessages[] = $error;
 	}
 
+	/**
+	 * Get the error messages array
+	 * 
+	 * @return $this->m_errorMessages, array of errormessages
+	 */
 	public function GetErrorMessages()
 	{
 		return $this->m_errorMessages;
@@ -54,6 +70,8 @@ class AuthView
 
 	/**
 	 * Remember me checkbox checked?
+	 * 
+	 * @return boolean
 	 */
 	public function TriedToRememberUser()
 	{
@@ -71,7 +89,7 @@ class AuthView
 	}
 
 	/**
-	 * Validate the fields in register form to a extern Validator
+	 * Validate the fields in register form to the Validator
 	 *
 	 * @return boolean
 	 */
@@ -89,9 +107,7 @@ class AuthView
 		$this->SetErrorMessages();
 
 		if(count($this->GetErrorMessages()) != 0)
-		{
 			return false;
-		}
 		
 		return true;
 	}
@@ -115,20 +131,17 @@ class AuthView
 	{
 		$password = "";
 		if(isset($_COOKIE[\Common\String::COOKIE_USER]))
-		{
 			$password = $_POST[\Common\String::PASSWORD];
-		}
 		else
-		{
 			$password = \Model\Krypter::Crypt($_POST[\Common\String::PASSWORD]);
-		}
+		
 		return $password;
 	}
 
 	/**
 	 * Get the password that was entered to register
 	 *
-	 * @return string, emailadress
+	 * @return string, register password
 	 */
 	public function GetRegisterPassword()
 	{
@@ -138,7 +151,7 @@ class AuthView
 	/**
 	 * Get the repeated password that was entered to register
 	 *
-	 * @return string, emailadress
+	 * @return string, repeatedPassword
 	 */
 	public function GetRepeatPassword()
 	{
@@ -158,7 +171,7 @@ class AuthView
 	/**
 	 * Get the email that was entered to register
 	 *
-	 * @return string, emailadress
+	 * @return string, skill
 	 */
 	public function GetSkill()
 	{
@@ -167,6 +180,8 @@ class AuthView
 
 	/**
 	 * Set a cookie with the Username, Password.
+	 * 
+	 * @param $user, a user object
 	 */
 	public function UserToRemember($user)
 	{

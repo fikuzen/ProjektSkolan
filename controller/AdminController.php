@@ -8,9 +8,12 @@ require_once('model/AdminModel.php');
 class AdminController
 {
 	private $m_db;
+	private $m_userInSession;
+	private $m_output = "";
 	public function __construct(\Model\Database $db)
 	{
 		$this->m_db = $db;
+		$this->m_userInSession = \Model\User::GetUserSession();
 	}
 	
 	public function DoControll()
@@ -18,14 +21,16 @@ class AdminController
 		$adminModel = new \Model\AdminModel($this->m_db);
 		$adminView = new \View\AdminView();
 		
-		$html = "";
-		if (\Model\User::GetUserSession())
+		/**
+		 * User logged in?
+		 */
+		if (isset($this->m_userInSession))
 		{
-			$user = \Model\User::GetUserSession();
-			if($adminModel->IsAdmin($user))
+			// Is the user an administrator?
+			if($adminModel->IsAdmin($this->m_userInSession))
 			{
 				\Common\Page::AddSuccessMessage(\Common\String::RIGHTS_ADMIN);
-				$html = $adminView->DoStart();
+				$this->m_output = $adminView->DoStart();
 			}
 			else 
 			{
@@ -36,6 +41,6 @@ class AdminController
 		{
 			\Common\Page::AddErrorMessage(\Common\String::NORIGHTS_ADMIN);
 		}
-		return $html;
+		return $this->m_output;
 	}
 }

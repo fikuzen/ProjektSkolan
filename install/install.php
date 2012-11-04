@@ -123,7 +123,7 @@ class InstallModel
 						$dbSetting->GetUser(), 
 						$dbSetting->GetPass()
 					);
-		if($mysqli->connect_error)
+		if($mysqli->connect_errno)
 		{
 			 throw new Exception($mysqli->connect_error);
 		}
@@ -137,8 +137,7 @@ class InstallModel
 		
 		$mysqli->multi_query($sql);
 		
-		$mysqli->close();
-		
+		$mysqli->close();		
 		return true;
 	}
 }
@@ -146,18 +145,18 @@ class InstallModel
 
 <!DOCTYPE html>
 <html lang="sv">
-	<head>
-		<meta charset="UTF-8" />
-		<title>Foodtime - Install</title>
-		<link rel="stylesheet" href="../frontend/css/style.css" />
-	</head>
-	<body>
-		<div id="wrapper">
-			<div class="container_12">
-				<?php echo InstallController::DoControll(); ?>
-			</div>
+<head>
+	<meta charset="UTF-8" />
+	<title>Foodtime - Install</title>
+	<link rel="stylesheet" href="../frontend/css/style.css" />
+</head>
+<body>
+	<div id="wrapper">
+		<div class="container_12">
+			<?php echo InstallController::DoControll(); ?>
 		</div>
-	</body>
+	</div>
+</body>
 </html>
 
 

@@ -174,7 +174,6 @@ class RecipeDAL
 	 */
 	public static function DeleteRecipe($recipeID)
 	{
-		var_dump($recipeID);
 		$table = RecipeDAL::table_name;
 		$sqlQuery = "DELETE FROM $table WHERE " . Recipe::RECIPEID . "=?";
 
@@ -201,8 +200,77 @@ class RecipeDAL
 		$errorMessages = array();
 		$errorMessages[] = "RecipeDAL Test";
 
-		//TODO: Write more test for RecipeDAL
-		$sut = new RecipeDAL($db);		
+		$sut = new RecipeDAL($db);
+
+		/**
+		 * Test to get a recipe that exists and check the ID
+		 * TEST #1
+		 */
+		$recipe = $sut->GetRecipeByName("BenganBengan2");
+		$recipeID = $recipe->GetRecipeID();
+		if($recipeID != 17)
+		{
+			$errorMessages[] = "GetRecipeByName failed (on line: " . __LINE__ . ")";
+		}
+
+		/**
+		 * Test to get a recipe from the GetRecipeByID
+		 * TEST #2
+		 */
+		if(!$sut->GetRecipeByID(13))
+		{
+			$errorMessages[] = "GetRecipeByID failed (on line: " . __LINE__ . ")";
+		}
+		
+		/**
+		 * Test to update a recipe
+		 * TEST #3
+		 */
+		if(!$sut->UpdateRecipe($recipe))
+		{
+			$errorMessages[] = "UpdateRecipe failed (on line: " . __LINE__ . ")";
+		}
+
+		/**
+		 * Add a recipe with a unique recipe name
+		 * TEST #4
+		 */
+		$recipes = $sut->GetAllRecipes();
+		try
+		{
+			$recipeInfo = array(
+				Recipe::USERID => 2,
+				Recipe::RECIPENAME => 'BenganBengan' . count($recipes),
+				Recipe::INGREDIENT => 'Bengan22Bengan22Bengan22Bengan22Bengan22',
+				Recipe::DESCRIPTION => 'BengaBenganBenganBengann@telia.com',
+				Recipe::SEVERITY => '2',
+			);
+			$recipe = new Recipe($recipeInfo);
+			$recipeIDToRemove = $sut->AddRecipe($recipe); // This recipe will be deleted in TEST #5
+			// Testsuccess
+		}
+		catch (\Exception $e)
+		{
+			$errorMessages[] = "AddRecipe failed (on line: " . __LINE__ . ")";
+		}
+
+		/**
+		 * Delete a recipe
+		 * TEST #5
+		 */
+		if(!$sut->DeleteRecipe($recipeIDToRemove))
+		{
+			$errorMessages[] = "DeleteRecipe failed (on line: " . __LINE__ . ")";
+		}
+
+		/**
+		 * Delete a recipe that not exists
+		 * TEST #6
+		 */
+		if($sut->DeleteRecipe($recipeIDToRemove))
+		{
+			$errorMessages[] = "DeleteRecipe failed (on line: " . __LINE__ . ")";
+		}
 
 		return $errorMessages;
 	}

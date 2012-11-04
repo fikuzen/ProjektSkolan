@@ -111,4 +111,9 @@ class String
 		// Links
 		const MY_PROFILE_LINK = "Min profil";
 		const EDIT_MY_PROFILE_LINK = "Inställningar";
+			// Menu
+			const HOME_LINK_TEXT = "Hem";
+			const RECIPE_LINK_TEXT = "Recept";
+			const USER_LINK_TEXT = "Användare";
+			const ADMIN_LINK_TEXT = "Admin";
 }

@@ -13,12 +13,14 @@ require_once('model/crypt/Krypter.php');
 require_once('model/database/Database.php');
 require_once('model/database/DBSettings.php');
 require_once('model/object/User.php');
+require_once('model/object/Recipe.php');
 require_once('model/DAL/UserDAL.php');
 require_once('model/DAL/RecipeDAL.php');
 require_once('model/validate/Validator.php');
 require_once('model/AuthModel.php');
 require_once('model/UserModel.php');
 require_once('model/AdminModel.php');
+require_once('model/RecipeModel.php');
 
 class TestController 
 {
@@ -42,7 +44,7 @@ class TestController
       $databasePassword = "";
       
 		// Database
-		$dbSettings = new \Model\DBSettings($databaseDB, $databaseHost, $databaseUser, $databasePassword);
+		$dbSettings = new \Model\DBSettings($databaseHost, $databaseUser, $databasePassword, $databaseDB);
   		$testDB = new \Model\Database();
 		$testDB->Connect($dbSettings);
 		
@@ -56,6 +58,9 @@ class TestController
       
       $dbTest = \Model\Database::test($dbSettings);
       $bodyContentLeft = $masterView->DoTestResult($dbTest);
+		
+		$dbSettingsTest = \Model\DBSettings::test();
+		$bodyContentLeft .= $masterView->DoTestResult($dbSettingsTest);
       
       $validateTest = \Model\Validator::test();
       $bodyContentLeft .= $masterView->DoTestResult($validateTest);
@@ -72,11 +77,20 @@ class TestController
 		$loginTest = \Model\AuthModel::test($testDB);
 		$bodyContentLeft .= $masterView->DoTestResult($loginTest);
 		
-		$userTest = \Model\UserModel::test($testDB);
-		$bodyContentLeft .= $masterView->DoTestResult($userTest);
+		$userModelTest = \Model\UserModel::test($testDB);
+		$bodyContentLeft .= $masterView->DoTestResult($userModelTest);
+		
+		$recipeModelTest = \Model\RecipeModel::test($testDB);
+		$bodyContentLeft .= $masterView->DoTestResult($recipeModelTest);
 		
 		$adminTest = \Model\AdminModel::test($testDB);
 		$bodyContentLeft .= $masterView->DoTestResult($adminTest);
+		
+		$recipeObjectTest = \Model\Recipe::test();
+		$bodyContentLeft .= $masterView->DoTestResult($recipeObjectTest);
+		
+		$userObjectTest = \Model\User::test();
+		$bodyContentLeft .= $masterView->DoTestResult($userObjectTest);
 		
 		$bodyFooter = $masterView->DoFooter();
 		self::$m_title = $masterView->DoSiteTitle();
