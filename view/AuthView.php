@@ -79,40 +79,6 @@ class AuthView
 	}
 
 	/**
-	 * Check if the user tried to register
-	 *
-	 * @return boolean
-	 */
-	public function TriedToRegister()
-	{
-		return isset($_POST[\Common\String::REGISTER_SUBMIT]);
-	}
-
-	/**
-	 * Validate the fields in register form to the Validator
-	 *
-	 * @return boolean
-	 */
-	public function ValidateRegisterNewUser()
-	{
-		if($this->m_validator->AnyTags($this->GetUsername()) && $this->m_validator->AnyTags($this->GetEmail()))
-		{
-			$this->m_validator->ValidateUsername($this->GetUsername());
-			$this->m_validator->ValidateEmail($this->GetEmail());
-			$this->m_validator->ValidatePassword($this->GetRegisterPassword());
-			$this->m_validator->ValidatePasswordMatch($this->GetRegisterPassword(), $this->GetRepeatPassword());
-			$this->m_validator->ValidateSkill($this->GetSkill());
-		}
-		
-		$this->SetErrorMessages();
-
-		if(count($this->GetErrorMessages()) != 0)
-			return false;
-		
-		return true;
-	}
-
-	/**
 	 * Get the username which was entered in the login form
 	 *
 	 * @return string, the entered username
@@ -242,45 +208,11 @@ class AuthView
 					<div class=\"authBox\">
 						<p>Välkommen <span>" . $user->GetUsername() . "</span></p>
 						<p><a href=\"" . NavigationView::GetUserProfileLink($user->GetUserID()) . "\">" . \Common\String::MY_PROFILE_LINK . "</a>
-						<p><a href=\"" . NavigationView::GetEditProfileLink($user->GetUserID()) . "\">" . \Common\String::EDIT_MY_PROFILE_LINK . "</a>
+						<p><a href=\"" . NavigationView::GetUserUpdateLink($user->GetUserID()) . "\">" . \Common\String::EDIT_MY_PROFILE_LINK . "</a>
 						<form method=\"post\">
 							<input type=\"submit\" name=\"" . \Common\String::LOGOUT_SUBMIT . "\" value=\"" . \Common\String::LOGOUT_SUBMIT_TEXT . "\" />
 						</form>
 					</div>";
-		return $html;
-	}
-
-	/**
-	 * Register a new user form
-	 *
-	 * @return $html, generated html code
-	 */
-	public function DoRegisterForm()
-	{
-		$usernameValue = $this->GetUsername() == null ? "" : $this->GetUsername();
-		$emailValue = $this->GetEmail() == null ? "" : $this->GetEmail();
-		
-		$html = "
-					<form method=\"post\">
-						<label for=\"" . \Common\String::USERNAME . "\">" . \Common\String::USERNAME_TEXT . "</label>
-						<input type=\"text\" id=\"" . \Common\String::USERNAME . "\" value=\"$usernameValue\" name=\"" . \Common\String::USERNAME . "\" />
-						<label for=\"" . \Common\String::EMAIL . "\">" . \Common\String::EMAIL_TEXT . "</label>
-						<input type=\"email\" id=\"" . \Common\String::EMAIL . "\" value=\"$emailValue\" name=\"" . \Common\String::EMAIL . "\" />
-						<label for=\"" . \Common\String::PASSWORD . "\">" . \Common\String::PASSWORD_TEXT . "</label>
-						<input type=\"password\" id=\"" . \Common\String::PASSWORD . "\" name=\"" . \Common\String::PASSWORD . "\" />
-						<label for=\"" . \Common\String::REPEAT_PASSWORD . "\">" . \Common\String::PASSWORD_REPEAT_TEXT . "</label>
-						<input type=\"password\" id=\"" . \Common\String::REPEAT_PASSWORD . "\" name=\"" . \Common\String::REPEAT_PASSWORD . "\" />
-						<label for=\"" . \Common\String::SKILL . "\">" . \Common\String::SKILL_TEXT . "</label>
-						<select id=\"" . \Common\String::SKILL . "\" name=\"" . \Common\String::SKILL . "\" />";
-		for($skill = \Common\String::SKILL_MIN; $skill <= \Common\String::SKILL_MAX; $skill++)
-		{
-			$html .= "<option value=\"$skill\">" . \Common\String::$skillText[$skill] . "</option>";
-		}
-		$html .= "
-						</select><br />
-						<input class=\"left\" type=\"submit\" name=\"" . \Common\String::REGISTER_SUBMIT . "\" value=\"" . \Common\String::REGISTER_SUBMIT_TEXT . "\" />
-					</form>
-				";
 		return $html;
 	}
 

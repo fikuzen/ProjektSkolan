@@ -13,8 +13,7 @@ class Page
 	private $m_charset = "";
 	private $m_language = "";
 	private $m_title = "";
-	public static $m_errorMessages = array();
-	public static $m_successMessages = array();
+	private static $m_errorMessages;
 	
 	/**
 	 * @param $language, string language, de
@@ -26,7 +25,6 @@ class Page
 		$this->m_charset = $charset;
 	}
 	
-	public static function AddSuccessMessage($message) { self::$m_successMessages[] = $message; }
 	public static function AddErrorMessage($message) { self::$m_errorMessages[] = $message; }
 	public function SetTitle($title) { $this->m_title = $title; }
 	
@@ -211,13 +209,9 @@ class Page
 	 * 
 	 * @return $body, html generated code.
 	 */
-	private function GenerateSuccessMessages()
+	private function GenerateSuccessMessages($message)
 	{
-		$body = "<div class=\"successMessage\">";
-		foreach (self::$m_successMessages as $m_successMessage) {
-			$body .= $m_successMessage . "<br />";
-		}
-		$body .= "</div>";
+		$body = "<div class=\"successMessage\">$message</div>";
 		return $body;
 	}
 	
@@ -232,7 +226,7 @@ class Page
 	 * @param $bodyFooter, the navigation bar, default NULL
 	 * @return $html, a html generated page.
 	 */
-	public function GenerateHTML5Page($bodyHeader = "", $bodyAuth = "", $bodyNavigation = "", $bodyContentLeft = "", $bodyContentRight = "", $bodyFooter = "")
+	public function GenerateHTML5Page($bodyHeader = "", $bodyAuth = "", $bodyNavigation = "", $bodyContentLeft = "", $bodyContentRight = "", $bodyFooter = "", $successMessage = NULL)
 	{
       $html = "<!DOCTYPE html>";
       $html .= "<html lang='$this->m_language'>";
@@ -257,9 +251,9 @@ class Page
 			$html .= $this->GenerateErrorMessages();
 		}
 		
-		if(count(self::$m_successMessages) != 0)
+		if(isset($successMessage))
 		{
-			$html .= $this->GenerateSuccessMessages();
+			$html .= $this->GenerateSuccessMessages($successMessage);
 		}
 		
 		$html .= $this->GenerateBodyFooter($bodyFooter);

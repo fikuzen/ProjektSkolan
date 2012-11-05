@@ -11,6 +11,7 @@ class NavigationView
 	private static $m_profile = "profile";
 	private static $m_recipeID = "recipeid";
 	private static $m_severity = "severity";
+	private static $m_msg = "message";
 	
 	CONST START = "index";
 	CONST LISTNING = "list";
@@ -28,6 +29,7 @@ class NavigationView
 	public static function IsSeverityQuery() { return isset($_GET[self::$m_severity]); }
 	public static function IsRegisterQuery() { return isset($_GET[self::$m_register]); }
 	public static function IsProfileQuery() { return isset($_GET[self::$m_profile]); }
+	public static function IsMsgQuery() { return isset($_GET[self::$m_msg]); }
 	
 	public static function GetAdminQuery() { return $_GET[self::$m_admin]; }
 	public static function GetUserQuery() { return $_GET[self::$m_user]; }
@@ -36,7 +38,18 @@ class NavigationView
 	public static function GetSeverityQuery() { return $_GET[self::$m_severity]; }
 	public static function GetRegisterQuery() { return $_GET[self::$m_register]; }
 	public static function GetProfileQuery() { return $_GET[self::$m_profile]; }
+	public static function GetMsgQuery() { return $_GET[self::$m_msg]; }
    
+	public static function RedirectUser($location, $message) 
+	{
+		$redirectLocation = $location;
+		if(isset($message))
+		{
+			$redirectLocation .= "&" . self::$m_msg . "=" . $message;
+		}
+		header("Location: $redirectLocation"); 
+	}
+	
    // Test URL
    public static function GetTestURL() { return self::$m_testURL; }
 	
@@ -59,9 +72,6 @@ class NavigationView
 	public static function GetUserDeleteLink() { return "?" . self::$m_user . "=". self::DELETE; }
 	public static function GetUserUpdateLink() { return "?" . self::$m_user . "=". self::EDIT; }
 	public static function GetUserProfileLink($userID) { return "?" . self::$m_user . "=" . $userID; }
-	
-	// Profile Links
-	public static function GetEditProfileLink($userID) { return "?" . self::$m_profile . "=" . self::EDIT; }
 	
 	// Register Link
 	public static function GetRegisterLink() { return "?" . self::$m_register . "=" . self::START; }

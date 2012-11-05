@@ -65,7 +65,7 @@ class MasterController
 			$bodyNavigation = \View\NavigationView::GetAdminNavigation();
 			$bodyContentLeft = $adminController->DoControll();
 		}
-		else if(\View\NavigationView::IsUserQuery() || \View\NavigationView::IsProfileQuery())
+		else if(\View\NavigationView::IsUserQuery())
 		{
 			$bodyNavigation = \View\NavigationView::GetUserNavigation();
 			$bodyContentLeft = $userController->DoControll();
@@ -78,7 +78,7 @@ class MasterController
 		else if(\View\NavigationView::IsRegisterQuery())
 		{
 			$bodyNavigation = \View\NavigationView::GetStartNavigation();
-			$bodyContentLeft = $authController->DoRegisterControll();
+			$bodyContentLeft = $userController->DoRegisterControll();
 		}
 		else 
 		{
@@ -86,9 +86,15 @@ class MasterController
 			$bodyContentLeft = $masterView->DoMainContent();
 		}
 		
+		$successMessage = null;		
+		if(\View\NavigationView::IsMsgQuery())
+		{
+			$successMessage = \View\NavigationView::GetMsgQuery();
+		}
+		
 		$db->Close();
 		
-		return $page->GenerateHTML5Page($bodyHeader, $bodyAuth, $bodyNavigation, $bodyContentLeft, $bodyContentRight, $bodyFooter);
+		return $page->GenerateHTML5Page($bodyHeader, $bodyAuth, $bodyNavigation, $bodyContentLeft, $bodyContentRight, $bodyFooter, $successMessage);
 	}
 }
 

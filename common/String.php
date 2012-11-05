@@ -74,7 +74,6 @@ class String
 		const DELETE_RECIPE_NOT_YOURS = "Receptet du försökte ta bort är inte skapat av dig.";
 		const RECIPE_DOES_NOT_EXIST = "Receptet finns inte.";
 		const NORIGHTS_ADMIN = "Du är inte administratör.";
-		const NORIGHTS_EDIT_PROFILE = "Du är inte inloggad och kan därför inte editera din profil.";
 		const WRONG_PASSWORD_OR_USERNAME = "Felaktigt lösenord eller användarnamn";
 		const FAIL_GET_USER_PROFILE = "Någonting gick fel med visningen av profil";
 		const FAIL_GET_USERS = "Det gick inte att hämta alla användare.";
@@ -116,4 +115,6 @@ class String
 			const RECIPE_LINK_TEXT = "Recept";
 			const USER_LINK_TEXT = "Användare";
 			const ADMIN_LINK_TEXT = "Admin";
+		// Information Text
+		const DELETE_PROFILE_TEXT = "Klicka på knappen här nedanför för att bekräfta din avregistrering";
 }

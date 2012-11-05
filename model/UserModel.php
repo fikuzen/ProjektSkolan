@@ -13,6 +13,32 @@ class UserModel
 		$this->m_db = $db;
 	}
 	
+	public function IsRegistered($username)
+	{
+		$user = UserDAL::GetUserByUsername($username);
+		if($user->GetUsername() == null)
+			return false;
+		
+		return true;
+	}
+	
+	/**
+	 * Register a user into the database.
+	 *
+	 * @param $user, User Object
+	 * @return $registerStatus, Boolean
+	 */
+	public function DoRegisterUser(User $user)
+	{
+		$registerStatus = true;
+		$user->SetPassword(Krypter::Crypt($user->GetPassword()));
+		
+		if(!UserDAL::AddUser($user))
+			$registerStatus = false;
+
+		return $registerStatus;
+	}
+	
 	/**
 	 * Updates a user who's in the database.
 	 *
@@ -74,6 +100,21 @@ class UserModel
 	public function GetUserByID($userID)
 	{
 		$user = UserDAL::GetUserByID($userID);
+		if($user)
+			return $user;
+		else
+			return false;
+	}
+	
+	/**
+	 * Get a user from the database
+	 * 
+	 * @param $Username, Username
+	 * @return User . the user.
+	 */
+	public function GetUserByUsername($username)
+	{
+		$user = UserDAL::GetUserByUsername($username);
 		if($user)
 			return $user;
 		else
