@@ -89,7 +89,7 @@ class MasterController
 		$successMessage = null;		
 		if(\View\NavigationView::IsMsgQuery())
 		{
-			$successMessage = \View\NavigationView::GetMsgQuery();
+			$successMessage = htmlentities(\View\NavigationView::GetMsgQuery());
 		}
 		
 		$db->Close();
