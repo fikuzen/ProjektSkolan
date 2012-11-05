@@ -50,7 +50,7 @@ class UserController
 								\Model\User::PASSWORD => $this->m_userView->GetPassword(),
 								\Model\User::SKILL => $this->m_userView->GetSkill()
 							);
-							
+							$user = new \Model\User($userInfo);
 							// try to update user.
 							try
 							{

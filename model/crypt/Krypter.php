@@ -4,6 +4,12 @@ namespace Model;
 
 class Krypter
 {
+	/**
+	 * Crypt a password with a default salt
+	 * 
+	 * @param $password, the password to be crypted
+	 * @return password, the crypted one.
+	 */
    public static function Crypt($password)
    {
       $salt = "Fk23s¤@@dsa";

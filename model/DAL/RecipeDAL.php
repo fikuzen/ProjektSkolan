@@ -15,6 +15,11 @@ class RecipeDAL
 		self::$m_db = $db;
 	}
 
+	/**
+	 * Get recipes from the databse
+	 * 
+	 * @return array .. A array with recipe objects
+	 */
 	public static function GetAllRecipes()
 	{
 		$table = RecipeDAL::table_name;
@@ -40,6 +45,12 @@ class RecipeDAL
 		return $recipes;
 	}
 
+	/**
+	 * Get Recipe By ID
+	 * 
+	 * @param $recipeID, a recipes ID
+	 * @return Recipe, a recipe object
+	 */
 	public static function GetRecipeByID($recipeID)
 	{
 		$table = RecipeDAL::table_name;
@@ -67,6 +78,12 @@ class RecipeDAL
 		return new Recipe($recipeInfo);
 	}
 
+	/**
+	 * Get a recipe by name
+	 * 
+	 * @param $recipename, a recipes recipename
+	 * @return Recipe, a recipe object
+	 */
 	public static function GetRecipeByName($recipename)
 	{
 		$table = RecipeDAL::table_name;
@@ -132,6 +149,7 @@ class RecipeDAL
 	/**
 	 * Update a recipes information
 	 * 
+	 * @param $recipe , a Recipe object
 	 * @return bool
 	 */
 	public static function UpdateRecipe(Recipe $recipe)

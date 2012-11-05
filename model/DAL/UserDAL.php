@@ -15,6 +15,11 @@ class UserDAL
 		self::$m_db = $db;
 	}
 
+	/**
+	 * Get all users from the databse
+	 * 
+	 * @return User array.. a array of user objects
+	 */
 	public static function GetAllUsers()
 	{
 		$table = UserDAL::table_name;
@@ -40,6 +45,12 @@ class UserDAL
 		return $users;
 	}
 
+	/**
+	 * Get a user from the database with a user ID
+	 * 
+	 * @param $userid, User Userid
+	 * @return User, a userobject
+	 */
 	public static function GetUserByID($userID)
 	{
 		$table = UserDAL::table_name;
@@ -68,6 +79,12 @@ class UserDAL
 		return new User($userInfo);
 	}
 
+	/**
+	 * Get a user from the database with a selected username
+	 * 
+	 * @param $username User Username
+	 * @return User . user objet
+	 */
 	public static function GetUserByUsername($username)
 	{
 		$table = UserDAL::table_name;
